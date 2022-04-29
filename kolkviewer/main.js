@@ -8,10 +8,13 @@ function draw() {
 
         var img = new Image();
         img.onload = function() {
+            vw = $( wktv ).width();
+            vh = $( wktv ).height();
+
+            canvas.width = vw;
             cw = canvas.clientWidth;
             iw = img.width;
             s = cw / iw;
-            //ctx.drawImage(img, 0, 0);
             ctx.drawImage(img, 0, 0, 1800, s*img.height);
         }
         img.src = 'img/kolkturm360.png';

@@ -3,12 +3,15 @@
   <head>
     <meta charset="utf-8"/>
     <title>Kolkturm Viewer 360</title>
+    <script type="text/javascript" src="jquery/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="kolkviewer/main.js"></script>
     <style>
       canvas { border: 1px solid black; }
     </style>
   </head>
   <body onload="draw()">
-    <canvas id="ktv" width="1800" height="600"></canvas>
+    <div id="wktv">
+      <canvas id="ktv"></canvas>
+    </div>
   </body>
 </html>
