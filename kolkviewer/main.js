@@ -10,12 +10,16 @@ function draw() {
         img.onload = function() {
             vw = $( wktv ).width();
             vh = $( wktv ).height();
+            vr = vw/vh; // View ratio
 
             canvas.width = vw;
+            canvas.height = vh;
+
             cw = canvas.clientWidth;
             iw = img.width;
-            s = cw / iw;
-            ctx.drawImage(img, 0, 0, 1800, s*img.height);
+            ih = img.height;
+            s = vh / ih;
+            ctx.drawImage(img, 0, 0, vr*ih, ih, 0, 0, vw, vh);
         }
         img.src = 'img/kolkturm360.png';
     }
