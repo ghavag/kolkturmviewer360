@@ -29,6 +29,9 @@ var posx = 0; // X and
 var posy = 0; //   y position of the clipping area
 var posz = 1.0; // Z position (zoom factor)
 var minz = null; // Minimum z position
+var mousex = null;
+var mousey = null;
+var mouseclicked = false;
 
 /**
  * Init function for the Kolkturm Viewer 360 called once the page has loaded
@@ -63,7 +66,60 @@ function initKolkViewer(wrapper_id, canvas_id, img_url) {
         pano.src = img_url;
     }
 
+    // Setting up handlers
     $(document).keydown(keyHandler);
+    $(canvas).mousewheel(mouseWheelHandler);
+    $(canvas).mousedown(mouseDownHandler);
+    $(document).mouseup(mouseUpHandler); // Mouse up event must be bound to the document
+    $(document).mousemove(mouseMoveHandler); // See comment above
+}
+
+/**
+ * Event handler for mouse move events called by the browser
+ * @param {object} event - Object with information about the mouse move event
+ */
+function mouseMoveHandler(event) {
+    if (mouseclicked) {
+        if (mousex != null && mousey != null) {
+            var deltax = (mousex - event.pageX)*(ih*posz/vh);
+            var deltay = (mousey - event.pageY)*(ih*posz/vh);
+            movex(deltax);
+            movey(deltay);
+            draw();
+        }
+
+        mousex = event.pageX;
+        mousey = event.pageY;
+    }
+}
+
+/**
+ * Event handler for mouse button down events called by the browser
+ * @param {object} event - Object with information about the mouse button event
+ */
+function mouseDownHandler(event) { // Left mouse button
+    mouseclicked = (event.which == 1);
+}
+
+/**
+ * Event handler for mouse button up events called by the browser
+ * @param {object} event - Object with information about the mouse button event
+ */
+function mouseUpHandler(event) {
+    if (event.which == 1) { // Left mouse button
+        mouseclicked = false;
+        mousex = mousey = null;
+    }
+}
+
+/**
+ * Event handler for mouse wheel events called by the browser
+ * @param {object} event - Object with information about the mouse wheel event
+ */
+function mouseWheelHandler(event) {
+    //console.log(event.deltaX, event.deltaY, event.deltaFactor, event.pageX, event.pageY);
+    zoom(event.deltaY*event.deltaFactor/-10000, event.pageX/vw, event.pageY/vh);
+    draw();
 }
 
 /**
@@ -96,12 +152,12 @@ function keyHandler(event) {
             break;
         case 107: // Plus
         case 171:
-            zoom(-0.01);
+            zoom(-0.01, 0.5, 0,5);
             draw();
             break;
         case 109: // Minus
         case 173:
-            zoom(0.01);
+            zoom(0.01, 0.5, 0.5);
             draw();
             break;
     }
@@ -110,15 +166,17 @@ function keyHandler(event) {
 /**
  * Changes the zoom factor relatively
  * @param {number} zi - z increment (positive number = zoom out;  negative number = zoom in)
+ * @param {number} fx - Fix point at the x axis while zooming (valid values between 0 and 1)
+ * @param {number} fy - Fix point at the y axis while zooming (valid values between 0 and 1)
  */
-function zoom(zi) {
+function zoom(zi, fx, fy) {
     var oldz = posz;
 
     posz = Math.min(Math.max(posz + zi, minz), 1);
 
     // Keep center centered while zooming
-    movex((oldz*vr*ih - posz*vr*ih)/2);
-    movey((oldz*ih - posz*ih)/2);
+    movex((oldz*vr*ih - posz*vr*ih)*fx);
+    movey((oldz*ih - posz*ih)*fy);
 }
 
 /**
