@@ -37,15 +37,36 @@ var mouseclicked = false;
  * Init function for the Kolkturm Viewer 360 called once the page has loaded
  * @param {string} wrapper_id - ID of the wrapper element (usually <div />) which wrapps the <canvas /> element
  * @param {string} canvas_id - ID of the <canvas /> element (main drawing area)
- * @param {string} img_url - URL pointing to the panorama image file
+ * @param {string} data_url - URL pointing to the json file which is the central information base
  */
-function initKolkViewer(wrapper_id, canvas_id, img_url) {
+function initKolkViewer(wrapper_id, canvas_id, data_url) {
+    var json_request = new XMLHttpRequest();
+
     wrapper = $("#" + wrapper_id).get(0);
     canvas = $("#" + canvas_id).get(0);
 
     vw = $(wrapper).width();
     vh = $(wrapper).height();
     vr = vw/vh;
+
+    pano = new Image();
+
+    pano.onload = function() {
+        iw = pano.width;
+        ih = pano.height;
+        minz = vh / ih;
+        draw();
+    }
+
+    // All required information is stored in a json file,
+    // even the panorama picture source URL
+    json_request.open('GET', data_url);
+    json_request.responseType = 'json';
+    json_request.send();
+
+    json_request.onload = function() {
+        pano.src = json_request.response['pano_url'];
+    }
 
     if (canvas.getContext) {
         var ctx = canvas.getContext('2d');
@@ -55,15 +76,6 @@ function initKolkViewer(wrapper_id, canvas_id, img_url) {
 
         ctx.font = '48px serif';
         ctx.fillText('Lade...', 10, 50);
-
-        pano = new Image();
-        pano.onload = function() {
-            iw = pano.width;
-            ih = pano.height;
-            minz = vh / ih;
-            draw();
-        }
-        pano.src = img_url;
     }
 
     // Setting up handlers
@@ -117,7 +129,6 @@ function mouseUpHandler(event) {
  * @param {object} event - Object with information about the mouse wheel event
  */
 function mouseWheelHandler(event) {
-    //console.log(event.deltaX, event.deltaY, event.deltaFactor, event.pageX, event.pageY);
     zoom(event.deltaY*event.deltaFactor/-10000, event.pageX/vw, event.pageY/vh);
     draw();
 }
