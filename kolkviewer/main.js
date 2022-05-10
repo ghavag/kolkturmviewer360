@@ -29,6 +29,7 @@ var posx = 0; // X and
 var posy = 0; //   y position of the clipping area
 var posz = 1.0; // Z position (zoom factor)
 var minz = null; // Minimum z position
+var nx_pos = null; // The position at the x axis where north is located
 var mousex = null;
 var mousey = null;
 var mouseclicked = false;
@@ -55,6 +56,7 @@ function initKolkViewer(wrapper_id, canvas_id, data_url) {
         iw = pano.width;
         ih = pano.height;
         minz = vh / ih;
+        movex(-(vw/2*ih*posz/vh-nx_pos)); // That takes the north direction into the view center
         draw();
     }
 
@@ -65,6 +67,7 @@ function initKolkViewer(wrapper_id, canvas_id, data_url) {
     json_request.send();
 
     json_request.onload = function() {
+        nx_pos = json_request.response['north_xposition']
         pano.src = json_request.response['pano_url'];
     }
 
