@@ -34,6 +34,11 @@ var mousex = null;
 var mousey = null;
 var mouseclicked = false;
 
+// Public variables required for the compass
+var compass_path2d = [];
+var px_letter_circle = [];
+var py_letter_circle = [];
+
 /**
  * Init function for the Kolkturm Viewer 360 called once the page has loaded
  * @param {string} wrapper_id - ID of the wrapper element (usually <div />) which wrapps the <canvas /> element
@@ -80,6 +85,8 @@ function initKolkViewer(wrapper_id, canvas_id, data_url) {
         ctx.font = '48px serif';
         ctx.fillText('Lade...', 10, 50);
     }
+
+    prepareCompass();
 
     // Setting up handlers
     $(document).keydown(keyHandler);
@@ -227,6 +234,105 @@ function movex(xi) {
 }
 
 /**
+ * Preparing the compass by calculating points and creating Path2D objects. The later increases performance.
+ */
+function prepareCompass() {
+  var radius_inner_circle = 7;
+  var radius_mid_circle = 30;
+  var radius_letter_circle = 33;
+  var radius_back_circle = 50;
+
+  var px_mid_circle = [];
+  var py_mid_circle = [];
+
+  var px_inner_circle = [];
+  var py_inner_circle = [];
+
+  // Calculate coordinates of all required points
+  for (var p = 0.0; p <= Math.PI*2; p += Math.PI/2) {
+    px_mid_circle.push(Math.sin(p) * radius_mid_circle);
+    py_mid_circle.push(Math.cos(p) * radius_mid_circle);
+
+    px_letter_circle.push(Math.sin(p) * radius_letter_circle);
+    py_letter_circle.push(Math.cos(p) * radius_letter_circle);
+
+    px_inner_circle.push(Math.sin(p + Math.PI/4) * radius_inner_circle);
+    py_inner_circle.push(Math.cos(p + Math.PI/4) * radius_inner_circle);
+  }
+
+  // Prepare background circle
+  var path2d = new Path2D();
+
+  path2d.arc(0, 0, radius_back_circle, 0, Math.PI * 2, true);
+  compass_path2d.push(path2d);
+
+  // Prepare north arrow
+  var path2d = new Path2D();
+
+  path2d.moveTo(0, 0);
+  path2d.lineTo(px_inner_circle[1], py_inner_circle[1]);
+  path2d.lineTo(px_mid_circle[2], py_mid_circle[2]);
+  path2d.lineTo(px_inner_circle[2], py_inner_circle[2]);
+  path2d.closePath();
+
+  compass_path2d.push(path2d);
+
+  // Prepare west to east arrows
+  var path2d = new Path2D();
+
+  path2d.moveTo(0, 0);
+  path2d.lineTo(px_inner_circle[2], py_inner_circle[2]);
+  path2d.lineTo(px_mid_circle[3], py_mid_circle[3]);
+  path2d.lineTo(px_inner_circle[3], py_inner_circle[3]);
+  path2d.lineTo(px_mid_circle[0], py_mid_circle[0]);
+  path2d.lineTo(px_inner_circle[0], py_inner_circle[0]);
+  path2d.lineTo(px_mid_circle[1], py_mid_circle[1]);
+  path2d.lineTo(px_inner_circle[1], py_inner_circle[1]);
+  path2d.closePath();
+
+  compass_path2d.push(path2d);
+}
+
+/**
+ * Draws the compass
+ * @param {object} ctx - 2d context
+ * @param {number} x - X position of the compass center
+ * @param {number} y - Y position of the compass center
+ * @param (number) d - Compass pointing direction in radians (0 to 2*Pi); 0 means north; Pi/2 equals west and so on
+ */
+function drawCompass(ctx, x, y, d) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(d);
+
+  // Draw all PAth2D objects
+  for (var i = 0; i < compass_path2d.length; i++) {
+    switch (i) {
+      case 0:
+        ctx.fillStyle = 'rgba(200, 200, 200, 0.5)';
+        break;
+      case 1:
+        ctx.fillStyle = 'red';
+        break;
+      default:
+        ctx.fillStyle = 'black';
+    }
+
+    ctx.fill(compass_path2d[i]);
+  }
+
+  ctx.font = '12px serif';
+  ctx.fillStyle = 'red';
+  ctx.fillText('N', px_letter_circle[2] - 5, py_letter_circle[2]);
+  ctx.fillStyle = 'black';
+  ctx.fillText('S', px_letter_circle[0] - 4, py_letter_circle[0] + 9);
+  ctx.fillText('O', px_letter_circle[1] - 2, py_letter_circle[1] + 5);
+  ctx.fillText('W', px_letter_circle[3] - 10, py_letter_circle[3] + 5);
+
+  ctx.restore();
+}
+
+/**
  * Main draw function. Draws the clipping area of the panorama image and other
  * things to the canvas element.
  */
@@ -241,5 +347,7 @@ function draw() {
         }
 
         ctx.drawImage(pano, posx, posy, vr*ih*posz, posz*ih, 0, 0, vw, vh);
+
+        drawCompass(ctx, vw - 75, 75, ((Math.PI*2)/iw)*(nx_pos-vw/2*ih*posz/vh-posx));
     }
 }
