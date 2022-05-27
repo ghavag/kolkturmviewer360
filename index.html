@@ -7,11 +7,22 @@
     <script type="text/javascript" src="jquery/jquery.mousewheel.min.js"></script>
     <script type="text/javascript" src="kolkviewer/main.js"></script>
     <style>
-      canvas { border: 1px solid black; }
+      body, html {
+        margin: 0px;
+        padding: 0px;
+      }
+
+      #wktv {
+        height: 100vh;
+      }
+
+      #ktv {
+        vertical-align: bottom;
+      }
     </style>
   </head>
-  <body onload="initKolkViewer('wktv', 'ktv', 'kolkturm.json')">
-    <div id="wktv" style="border: solid 1px red; height: 97vh;">
+  <body onload="initKolkViewer('ktv', 'kolkturm.json')">
+    <div id="wktv">
       <canvas id="ktv"></canvas>
     </div>
   </body>

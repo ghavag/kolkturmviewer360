@@ -41,15 +41,15 @@ var py_letter_circle = [];
 
 /**
  * Init function for the Kolkturm Viewer 360 called once the page has loaded
- * @param {string} wrapper_id - ID of the wrapper element (usually <div />) which wrapps the <canvas /> element
  * @param {string} canvas_id - ID of the <canvas /> element (main drawing area)
  * @param {string} data_url - URL pointing to the json file which is the central information base
  */
-function initKolkViewer(wrapper_id, canvas_id, data_url) {
+function initKolkViewer(canvas_id, data_url) {
     var json_request = new XMLHttpRequest();
 
-    wrapper = $("#" + wrapper_id).get(0);
+    //wrapper = $("#" + wrapper_id).get(0);
     canvas = $("#" + canvas_id).get(0);
+    wrapper = $(canvas).parent();
 
     vw = $(wrapper).width();
     vh = $(wrapper).height();
