@@ -34,6 +34,13 @@ var mousex = null;
 var mousey = null;
 var mouseclicked = false;
 
+/**
+ * Indicates that an animation is in progress. Running animations MUST
+ * stop if that variable is set to false. Also animations MUST set this
+ * variable to false after they complete.
+ */
+var animation_running = false;
+
 // Public variables required for the compass
 var compass_path2d = [];
 var px_letter_circle = [];
@@ -112,6 +119,7 @@ function mouseMoveHandler(event) {
 
         mousex = event.pageX;
         mousey = event.pageY;
+        animation_running = false;
     }
 }
 
@@ -150,6 +158,9 @@ function mouseWheelHandler(event) {
 function keyHandler(event) {
     console.log("event.which: " + event.which + " event.keyCode: " + event.keyCode);
     switch (event.which) {
+        case 27: // Escape
+            animation_running = false; // Cancel all running animations
+            break;
         case 37: // Left
             movex(-10);
             draw();
@@ -180,6 +191,19 @@ function keyHandler(event) {
         case 173:
             zoom(0.01, 0.5, 0.5);
             draw();
+            break;
+        case 78: // N - North position
+            moveToCompassPosition('N');
+            break;
+        case 69: // E - East position
+        case 79: // O - Ost (east in German) position
+            moveToCompassPosition('O');
+            break;
+        case 83: // S - South position
+            moveToCompassPosition('S');
+            break;
+        case 87: // W - West position
+            moveToCompassPosition('W');
             break;
     }
 }
@@ -231,6 +255,95 @@ function movex(xi) {
     } else if (posx < -(vr*ih*posz)) {
         posx = maxx + (posx + vr*ih*posz);
     }
+}
+
+/**
+ * Moves the center view position to the given compass direction
+ * @param {character} cpos - A character out of [nNeEoOsSwW], e.g. 'n' for north
+ */
+function moveToCompassPosition(cpos) {
+    const north_pos = nx_pos-vw/2*ih*posz/vh;
+    var tpos = 0; // Target position
+    var movdir = 1;
+
+    switch (cpos) {
+        case 'n', 'N':
+            tpos = north_pos;
+            break;
+        case 'e', 'E', 'o', 'O':
+            tpos = north_pos + iw/4;
+            break;
+        case 's', 'S':
+            tpos = north_pos + iw/4*2;
+            break;
+        case 'w', 'W':
+            tpos = north_pos + iw/4*3;
+            break;
+        default:
+            return;
+    }
+
+    if (tpos > posx) { // Target position is to the right from current position
+        dist = tpos - posx;
+
+        // Distance is shorter if moving the the left
+        if (dist > (posx + iw - tpos)) {
+            dist = posx + iw - tpos;
+            movdir = -1;
+        }
+    } else {
+        dist = posx - tpos;
+        movdir = -1;
+
+        // Distance is shorter if moving to the right
+        if (dist > (tpos + iw - posx)) {
+            dist = tpos + iw - posx;
+            movdir = 1;
+        }
+    }
+
+    animation_running = true;
+    animatedMoveToXPos(dist, movdir);
+}
+
+/**
+ * Performs an animated move on the x axis over a given distance and moving
+ * direction. The speed of the movement increases first and when decreases
+ * until the movement for the given distance is finally complete. Before
+ * that function is called the global variable animation_running MUST be set
+ * to true.
+ * @param {number} number - Distance to be covered, must be positive
+ * @param {number} movdir - Moving direction. Either to the right (movdir == 1, e.g. from north to east)
+ *                          or to the left (movdir == -1, e.g. from north to west)
+ * @param {number} cov - Covered distance so far. NOT meant to be set by the user
+ * @param {number} speed - Current speed of movement. NOT meant to be set by the user
+ * @param {number} acc - Indicates whether the speed is increasing (1) or decreasing (-1). NOT meant to be set by the user
+ */
+function animatedMoveToXPos(dist, movdir=0, cov=0, speed=0, acc=1) {
+    if (!(movdir == 1 || movdir == -1)) {
+        throw new Error("Parameter movdir must be either 1 or -1");
+    }
+
+    if (!(acc == 1 || acc == -1)) {
+        throw new Error("Parameter acc must be either 1 or -1");
+    }
+
+    speed += acc * 20;
+
+    if (cov >= dist/2) acc = -1;
+
+    if ((cov + speed) > dist) speed = dist - cov;
+
+    cov += speed;
+    movex(movdir * speed);
+
+    if (cov < dist && animation_running) {
+        setTimeout(animatedMoveToXPos, 50, dist, movdir, cov, speed, acc);
+    } else {
+        animation_running = false;
+    }
+
+    draw();
 }
 
 /**
