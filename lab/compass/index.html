@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Kompass Test</title>
+    <style>
+      #ksrc {
+        width: 150px;
+        height: 150px;
+        position: absolute;
+        top: 100px;
+        right: 100px;
+        transform: rotate(0deg);
+      }
+
+      #ktv,#ktv2 {
+        width: 300px;
+        height: 300px;
+        border: solid 1px red;
+      }
+    </style>
+    <script type="text/javascript">
+      var d = 0;
+      var img;
+      var compass_path2d = [];
+      var px_letter_circle = [];
+      var py_letter_circle = [];
+
+      function prepareCompass() {
+        var radius_inner_circle = 7;
+        var radius_mid_circle = 30;
+        var radius_letter_circle = 33;
+        var radius_back_circle = 50;
+
+        var px_mid_circle = [];
+        var py_mid_circle = [];
+
+        var px_inner_circle = [];
+        var py_inner_circle = [];
+
+        // Calculate coordinates of all required points
+        for (var p = 0.0; p <= Math.PI*2; p += Math.PI/2) {
+          px_mid_circle.push(Math.sin(p) * radius_mid_circle);
+          py_mid_circle.push(Math.cos(p) * radius_mid_circle);
+
+          px_letter_circle.push(Math.sin(p) * radius_letter_circle);
+          py_letter_circle.push(Math.cos(p) * radius_letter_circle);
+
+          px_inner_circle.push(Math.sin(p + Math.PI/4) * radius_inner_circle);
+          py_inner_circle.push(Math.cos(p + Math.PI/4) * radius_inner_circle);
+        }
+
+        // Prepare background circle
+        var path2d = new Path2D();
+
+        path2d.arc(0, 0, radius_back_circle, 0, Math.PI * 2, true);
+        compass_path2d.push(path2d);
+
+        // Prepare north arrow
+        var path2d = new Path2D();
+
+        path2d.moveTo(0, 0);
+        path2d.lineTo(px_inner_circle[1], py_inner_circle[1]);
+        path2d.lineTo(px_mid_circle[2], py_mid_circle[2]);
+        path2d.lineTo(px_inner_circle[2], py_inner_circle[2]);
+        path2d.closePath();
+
+        compass_path2d.push(path2d);
+
+        // Prepare west to east arrows
+        var path2d = new Path2D();
+
+        path2d.moveTo(0, 0);
+        path2d.lineTo(px_inner_circle[2], py_inner_circle[2]);
+        path2d.lineTo(px_mid_circle[3], py_mid_circle[3]);
+        path2d.lineTo(px_inner_circle[3], py_inner_circle[3]);
+        path2d.lineTo(px_mid_circle[0], py_mid_circle[0]);
+        path2d.lineTo(px_inner_circle[0], py_inner_circle[0]);
+        path2d.lineTo(px_mid_circle[1], py_mid_circle[1]);
+        path2d.lineTo(px_inner_circle[1], py_inner_circle[1]);
+        path2d.closePath();
+
+        compass_path2d.push(path2d);
+      }
+
+      function rotate() {
+        img = document.getElementById("ksrc");
+
+        d++;
+        img.style.transform = "rotate(" + d + "deg)"
+
+        drawcompass(d);
+      }
+
+      function drawcompass(d) {
+        var can = document.getElementById("ktv");
+
+        if (can.getContext) {
+          var ctx = can.getContext('2d');
+
+          ctx.clearRect(0, 0, can.width, can.height);
+
+          ctx.save();
+          ctx.translate(150, 150);
+          ctx.rotate((Math.PI/180)*d);
+
+          // Draw all PAth2D objects
+          for (var i = 0; i < compass_path2d.length; i++) {
+            switch (i) {
+              case 0:
+                ctx.fillStyle = 'rgba(200, 200, 200, 0.5)';
+                break;
+              case 1:
+                ctx.fillStyle = 'red';
+                break;
+              default:
+                ctx.fillStyle = 'black';
+            }
+
+            ctx.fill(compass_path2d[i]);
+          }
+
+          ctx.font = '12px serif';
+          ctx.fillStyle = 'red';
+          ctx.fillText('N', px_letter_circle[2] - 5, py_letter_circle[2]);
+          ctx.fillStyle = 'black';
+          ctx.fillText('S', px_letter_circle[0] - 4, py_letter_circle[0] + 9);
+          ctx.fillText('O', px_letter_circle[1] - 2, py_letter_circle[1] + 5);
+          ctx.fillText('W', px_letter_circle[3] - 10, py_letter_circle[3] + 5);
+
+          ctx.restore();
+        }
+
+        var can2 = document.getElementById("ktv2");
+
+        if (can2.getContext) {
+          var ctx2 = can2.getContext('2d');
+
+          ctx2.clearRect(0, 0, can.width, can.height);
+
+          ctx2.save();
+          ctx2.translate(50, 50);
+          ctx2.rotate((Math.PI / 180) * d);
+          ctx2.translate(-50, -50);
+
+          ctx2.drawImage(img, 0, 0, 1720, 1720, 0, 0, 100, 100);
+
+          ctx2.restore();
+        }
+      }
+    </script>
+  </head>
+  <body onload="prepareCompass(); setInterval(rotate, 100);">
+    <!-- <img src="/home/graeb/Pictures/Wallpapers/SecuStack_plain.jpg" /> -->
+    <img id="ksrc" src="kompass.svg" />
+    <canvas width="300" height="300" id="ktv"></canvas>
+    <canvas width="300" height="300" id="ktv2"></canvas>
+    <!-- <form>
+      <input type="button" value="Rotiere" onClick="rotate();">
+    </form>
+  </body>-->
+</html>
