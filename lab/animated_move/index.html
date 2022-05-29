@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Kolkturm Viewer 360</title>
+    <script type="text/javascript" src="../../jquery/jquery-3.6.0.min.js"></script>
+    <!-- <script type="text/javascript" src="jquery/jquery.mousewheel.min.js"></script> -->
+    <script type="text/javascript">
+        var canvas;
+        var ctx;
+        var const_speed;
+        var vw;
+        var vh;
+
+        function init() {
+            canvas = $("#ktv").get(0);
+            var wrapper = $(canvas).parent();
+
+            vw = $(wrapper).width();
+            vh = $(wrapper).height();
+
+            canvas.width = vw;
+            canvas.height = vh;
+
+            ctx = canvas.getContext('2d');
+
+            ctx.font = '14px serif';
+            ctx.fillText('Const. speed:', 20, 100);
+        }
+
+        function startAnimation() {
+            const_speed = setTimeout(f_const_speed, 50, 200, vw - 50, 200);
+        }
+
+        function f_const_speed(start, end, cur) {
+            ctx.clearRect(170, 70, vw, 60);
+
+            ctx.beginPath();
+            ctx.arc(cur, 100, 30, 0, Math.PI * 2, true);
+            ctx.fill();
+
+            if (cur < end) {
+                setTimeout(f_const_speed, 50, start, end, cur + 10);
+            }
+        }
+    </script>
+    <style>
+      body, html {
+        margin: 0px;
+        padding: 0px;
+      }
+
+      #wktv {
+        height: 100vh;
+      }
+
+      #ktv {
+        vertical-align: bottom;
+      }
+    </style>
+  </head>
+  <body onload="init()">
+    <div id="wktv">
+      <canvas id="ktv"></canvas>
+    </div>
+    <button OnClick="startAnimation();" style="position: absolute; top: 20px; left: 20px" type="button">Start</botton>
+  </body>
+</html>
