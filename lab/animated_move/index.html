@@ -26,10 +26,12 @@
 
             ctx.font = '14px serif';
             ctx.fillText('Const. speed:', 20, 100);
+            ctx.fillText('Linear inc/dec speed:', 20, 200);
         }
 
         function startAnimation() {
             const_speed = setTimeout(f_const_speed, 50, 200, vw - 50, 200);
+            setTimeout(f_inc_dev_speed, 50, 200, vw - 50, 200, 0, true);
         }
 
         function f_const_speed(start, end, cur) {
@@ -41,6 +43,32 @@
 
             if (cur < end) {
                 setTimeout(f_const_speed, 50, start, end, cur + 10);
+            } else {
+              console.log("f_const_speed end position: " + cur);
+            }
+        }
+
+        function f_inc_dev_speed(start, end, cur, speed, acc) {
+            ctx.clearRect(170, 170, vw, 60);
+
+            ctx.beginPath();
+            ctx.arc(cur, 200, 30, 0, Math.PI * 2, true);
+            ctx.fill();
+
+            if (acc) {
+              speed += 2;
+            } else {
+              speed -= 2;
+            }
+
+            if (cur >= (start + (end - start)/2)) acc=false;
+
+            if (cur + speed > end) speed = end - cur;
+
+            if (cur < end) {
+                setTimeout(f_inc_dev_speed, 50, start, end, cur + speed, speed, acc);
+            } else {
+              console.log("f_inc_dev_speed end position: " + cur);
             }
         }
     </script>
