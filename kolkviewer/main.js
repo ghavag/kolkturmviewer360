@@ -228,9 +228,12 @@ function zoom(zi, fx, fy) {
  * Resets the zoom factor to the initial value
  */
 function resetZoom() {
-    movex((posz*vr*ih - vr*ih)/2); // Keep center centered while reset zoom factor
+    var oldz = posz;
+
     posy = 0;
     posz = 1.0;
+
+    movex((oldz*vr*ih - vr*ih)/2); // Keep center centered while reset zoom factor
 }
 
 /**
