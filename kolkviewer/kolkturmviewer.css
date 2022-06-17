@@ -1,0 +1,43 @@
+#wktv {
+    height: 100vh;
+}
+
+#ktv {
+    vertical-align: bottom;
+}
+
+.ktv-objinfo {
+    position: absolute;
+    display: none;
+    background: black;
+    border: 1px solid white;
+    padding: 10px;
+    padding-bottom: 15px;
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 7px black;
+}
+
+.ktv-objinfo:after {
+    background: black;
+    border: 1px solid white;
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    bottom: -20px;
+    width: 24px;
+    height: 24px;
+    border-top: 0px;
+    border-left: 0px;
+    margin-left: -12px;
+    margin-top: -12px;
+    box-shadow: 6px 5px 9px -9px black;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.ktv-objinfo table {
+    border-collapse: collapse;
+}

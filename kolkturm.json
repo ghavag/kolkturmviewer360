@@ -1,4 +1,55 @@
 {
     "pano_url": "img/kolkturm360.jpg",
-    "north_xposition": 2015
+    "north_xposition": 2015,
+    "objects": [
+        {
+            "name": "Object 1",
+            "add_name": "Unbekanntes Objekt im Norden",
+            "location": "Überall Straße 55a",
+            "distance": "13 Km",
+            "pointer_y": 1300,
+            "areas": [
+                {
+                    "x": 2118.375,
+                    "y": 1388,
+                    "width": 262.502,
+                    "height": 44.296
+                }
+            ]
+        },
+        {
+            "name": "Object 2",
+            "add_name": "Unbekanntes Objekt im Norden",
+            "location": "Überall Straße 54",
+            "distance": "13,5 Km",
+            "pointer_x": 2000,
+            "areas": [
+                {
+                    "x": 1954.486,
+                    "y": 1383,
+                    "width": 157.685,
+                    "height": 46.348
+                }
+            ]
+        },
+        {
+        "name": "Object 3",
+        "location": "Abwasser Str. 1",
+        "distance": "8,76 Km",
+        "areas": [
+            {
+                "x": 4624.619,
+                "y": 1382,
+                "width": 33,
+                "height": 29.563
+            },
+            {
+                "x": 4670.779,
+                "y": 1382,
+                "width": 33,
+                "height": 29.563
+            }
+        ]
+    }
+    ]
 }

@@ -46,6 +46,12 @@ var compass_path2d = [];
 var px_letter_circle = [];
 var py_letter_circle = [];
 
+var objects = [];
+var last_hovered_object = null;
+var objinfo_div = null;
+var draw_all_object_areas = false;
+var draw_object_areas_on_mouseover = false;
+
 /**
  * Init function for the Kolkturm Viewer 360 called once the page has loaded
  * @param {string} canvas_id - ID of the <canvas /> element (main drawing area)
@@ -54,9 +60,9 @@ var py_letter_circle = [];
 function initKolkViewer(canvas_id, data_url) {
     var json_request = new XMLHttpRequest();
 
-    //wrapper = $("#" + wrapper_id).get(0);
     canvas = $("#" + canvas_id).get(0);
     wrapper = $(canvas).parent();
+    objinfo_div = $("<div>", { class: "ktv-objinfo" }).appendTo(wrapper);
 
     vw = $(wrapper).width();
     vh = $(wrapper).height();
@@ -81,6 +87,7 @@ function initKolkViewer(canvas_id, data_url) {
     json_request.onload = function() {
         nx_pos = json_request.response['north_xposition']
         pano.src = json_request.response['pano_url'];
+        objects = prepareObjectArray(json_request.response['objects']);
     }
 
     if (canvas.getContext) {
@@ -120,6 +127,8 @@ function mouseMoveHandler(event) {
         mousex = event.pageX;
         mousey = event.pageY;
         animation_running = false;
+    } else {
+        mouseHoverObjectHandler(event.pageX, event.pageY)
     }
 }
 
@@ -350,6 +359,106 @@ function animatedMoveToXPos(dist, movdir=0, cov=0, speed=0, acc=1) {
 }
 
 /**
+ * The information about objects is beeing fetched from json data. This function supplements data
+ * which is optional or can be calculated from given data.
+ * @param {object} json_data - Json object which holds the object information
+ */
+function prepareObjectArray(json_data) {
+     // Currently only the center-top position is calculated if not given by json data. This is
+     // the position over which the object information is displayed.
+    json_data.forEach(function(obj) {
+        // Upper left corner of the object
+        var x1 = null;
+        var y1 = null;
+
+        // X position of the lower right corner of the object
+        var x2 = 0;
+
+        obj.areas.forEach(function(area) {
+            if (x1 > area.x || x1 == null) x1 = area.x;
+            if (y1 > area.y || y1 == null) y1 = area.y;
+            if (x2 < (area.x + area.width)) x2 = area.x + area.width;
+        });
+
+        if (!obj.pointer_x) obj.pointer_x = x1 + (x2 - x1)/2;
+        if (!obj.pointer_y) obj.pointer_y = y1;
+    });
+
+    return json_data;
+}
+
+/**
+ * Check whether a given (mouse) position hovers an object and reacts to that by
+ * either show the object info div or hiding it.
+ * @param {number} vx - X position (of the mouse pointer) in view space
+ * @param {number} vy - Y position (of the mouse pointer) in view space
+ */
+function mouseHoverObjectHandler(vx, vy) {
+    var ix = vx*(ih*posz/vh) + posx;
+    var iy = vy*(ih*posz/vh) + posy;
+    var hovered_object = null;
+
+    objects.forEach(function(o) {
+        o.areas.forEach(function(a) {
+            if ((ix >= a.x && ix <= (a.x + a.width)) && (iy >= a.y && iy <= (a.y + a.height))) {
+                hovered_object = o;
+            }
+        });
+    });
+
+    if (hovered_object != last_hovered_object) {
+        if (draw_object_areas_on_mouseover) draw(); // Re-draw the current frame to erase the areas of the last hovered object
+
+        if (hovered_object == null) {
+            hideObjectInformation();
+        } else {
+            showObjectInformation(hovered_object);
+            if (draw_object_areas_on_mouseover) drawObjectAreas(null, hovered_object);
+        }
+        last_hovered_object = hovered_object;
+    }
+}
+
+/**
+ * Fills the object info div with information of the given object and displays the div.
+ * @param {object} obj - JavaScript object that holds the information of the object whose information is to be displayed
+ */
+function showObjectInformation(obj) {
+    var html = "<table>";
+
+    html += "<tr><th colspan=\"2\">" + obj.name + "</th><tr>";
+
+    if (obj.add_name) {
+        html += "<tr><td colspan=\"2\" class=\"add_name\">" + obj.add_name + "</td><tr>";
+    }
+
+    if (obj.location) {
+        html += "<tr><td>Adresse:</td><td>" + obj.location + "</td><tr>";
+    }
+
+    if (obj.distance) {
+        html += "<tr><td>Entfernung:</td><td>" + obj.distance + "</td><tr>";
+    }
+
+    html += "</table>";
+
+    objinfo_div.html(html);
+
+    var x = (obj.pointer_x - posx)*(vh/(ih*posz)) - objinfo_div.outerWidth()/2;
+    var y = (obj.pointer_y - posy)/(ih*posz/vh) - objinfo_div.outerHeight() - 12; // Add 12 extra pixels for the arrow at the bottom
+
+    objinfo_div.css({top: y, left: x});
+    objinfo_div.show();
+}
+
+/**
+ * Hide the object info div
+ */
+function hideObjectInformation() {
+    objinfo_div.hide();
+}
+
+/**
  * Preparing the compass by calculating points and creating Path2D objects. The later increases performance.
  */
 function prepareCompass() {
@@ -414,7 +523,7 @@ function prepareCompass() {
  * @param {object} ctx - 2d context
  * @param {number} x - X position of the compass center
  * @param {number} y - Y position of the compass center
- * @param (number) d - Compass pointing direction in radians (0 to 2*Pi); 0 means north; Pi/2 equals west and so on
+ * @param {number} d - Compass pointing direction in radians (0 to 2*Pi); 0 means north; Pi/2 equals west and so on
  */
 function drawCompass(ctx, x, y, d) {
   ctx.save();
@@ -449,6 +558,21 @@ function drawCompass(ctx, x, y, d) {
 }
 
 /**
+ * Draw all areas of an object as red rectangles
+ * @param {object} ctx - 2d context. If null the 2d context is retrieved from the canvas element automatically
+ * @param {object} obj - JavaScript object with holds the object whose areas are to be drawn
+ */
+function drawObjectAreas(ctx, obj) {
+    if (ctx == null) ctx = canvas.getContext('2d');
+
+    ctx.strokeStyle = 'red';
+
+    obj.areas.forEach(function(a) {
+        ctx.strokeRect((a.x-posx)/(ih*posz/vh), (a.y-posy)/(ih*posz/vh), a.width/(ih*posz/vh), a.height/(ih*posz/vh));
+    });
+}
+
+/**
  * Main draw function. Draws the clipping area of the panorama image and other
  * things to the canvas element.
  */
@@ -465,5 +589,11 @@ function draw() {
         ctx.drawImage(pano, posx, posy, vr*ih*posz, posz*ih, 0, 0, vw, vh);
 
         drawCompass(ctx, vw - 75, 75, ((Math.PI*2)/iw)*(nx_pos-vw/2*ih*posz/vh-posx));
+
+        if (draw_all_object_areas) {
+            objects.forEach(function(o) {
+                drawObjectAreas(ctx, o);
+            });
+        }
     }
 }
