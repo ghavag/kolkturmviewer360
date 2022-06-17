@@ -583,7 +583,7 @@ function draw() {
         // For x (vertical) axis infinit scrolling is supported. If the area where
         // left and right end of the picture meet is visible, we need special handling.
         if (posx < 0) {
-            ctx.drawImage(pano, iw+posx, posy, vr*ih*posz, posz*ih, 0, 0, vw, vh);
+            ctx.drawImage(pano, iw+posx-1, posy, vr*ih*posz, posz*ih, 0, 0, vw, vh);
         }
 
         ctx.drawImage(pano, posx, posy, vr*ih*posz, posz*ih, 0, 0, vw, vh);
