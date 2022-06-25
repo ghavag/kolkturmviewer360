@@ -18,6 +18,7 @@
  *
  */
 var canvas = null;
+var ctx2d = null;
 var wrapper = null;
 var pano = null; // The DOM object representing the panorama picture
 var vw = null; // View (canvas) width
@@ -61,6 +62,7 @@ function initKolkViewer(canvas_id, data_url) {
     var json_request = new XMLHttpRequest();
 
     canvas = $("#" + canvas_id).get(0);
+    ctx2d = canvas.getContext('2d');
     wrapper = $(canvas).parent();
     objinfo_div = $("<div>", { class: "ktv-objinfo" }).appendTo(wrapper);
 
@@ -75,6 +77,7 @@ function initKolkViewer(canvas_id, data_url) {
         ih = pano.height;
         minz = vh / ih;
         movex(-(vw/2*ih*posz/vh-nx_pos)); // That takes the north direction into the view center
+        animation_running = false; // Stop loading animation
         draw();
     }
 
@@ -90,17 +93,13 @@ function initKolkViewer(canvas_id, data_url) {
         objects = prepareObjectArray(json_request.response['objects']);
     }
 
-    if (canvas.getContext) {
-        var ctx = canvas.getContext('2d');
-
-        canvas.width = vw;
-        canvas.height = vh;
-
-        ctx.font = '48px serif';
-        ctx.fillText('Lade...', 10, 50);
-    }
+    canvas.width = vw;
+    canvas.height = vh;
 
     prepareCompass();
+
+    animation_running = true;
+    loadingAnimation();
 
     // Setting up handlers
     $(document).keydown(keyHandler);
@@ -570,6 +569,38 @@ function drawObjectAreas(ctx, obj) {
     obj.areas.forEach(function(a) {
         ctx.strokeRect((a.x-posx)/(ih*posz/vh), (a.y-posy)/(ih*posz/vh), a.width/(ih*posz/vh), a.height/(ih*posz/vh));
     });
+}
+
+/**
+ * Performs the loading animation while the image is downloading until animation_running is set to false. The loading
+ * animation is a rotating compass and a text that informs the user that image downloading is in progress.
+ * @param {number} rad - Current angel of the compass in radians
+ */
+function loadingAnimation(rad=0.0) {
+    if (!animation_running) {
+        return;
+    }
+
+    var x = vw/2;
+    var y = vh/2;
+
+    ctx2d.fillStyle = 'white';
+    ctx2d.arc(x, y, 50, 0, Math.PI * 2, true);
+    ctx2d.fill();
+
+    drawCompass(ctx2d, x, y, rad);
+
+    ctx2d.save();
+    ctx2d.font = '32px serif';
+    ctx2d.textAlign = 'center';
+    ctx2d.textBaseline = 'top';
+    ctx2d.fillStyle = 'black';
+    ctx2d.fillText('Bild wird geladen. Bitte warten...', x, y + 75);
+    ctx2d.restore();
+
+    if (animation_running) {
+        setTimeout(loadingAnimation, 50, rad + 0.1);
+    }
 }
 
 /**
