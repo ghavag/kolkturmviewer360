@@ -519,55 +519,51 @@ function prepareCompass() {
 
 /**
  * Draws the compass
- * @param {object} ctx - 2d context
  * @param {number} x - X position of the compass center
  * @param {number} y - Y position of the compass center
  * @param {number} d - Compass pointing direction in radians (0 to 2*Pi); 0 means north; Pi/2 equals west and so on
  */
-function drawCompass(ctx, x, y, d) {
-  ctx.save();
-  ctx.translate(x, y);
-  ctx.rotate(d);
+function drawCompass(x, y, d) {
+  ctx2d.save();
+  ctx2d.translate(x, y);
+  ctx2d.rotate(d);
 
   // Draw all PAth2D objects
   for (var i = 0; i < compass_path2d.length; i++) {
     switch (i) {
       case 0:
-        ctx.fillStyle = 'rgba(200, 200, 200, 0.5)';
+        ctx2d.fillStyle = 'rgba(200, 200, 200, 0.5)';
         break;
       case 1:
-        ctx.fillStyle = 'red';
+        ctx2d.fillStyle = 'red';
         break;
       default:
-        ctx.fillStyle = 'black';
+        ctx2d.fillStyle = 'black';
     }
 
-    ctx.fill(compass_path2d[i]);
+    ctx2d.fill(compass_path2d[i]);
   }
 
-  ctx.font = '12px serif';
-  ctx.fillStyle = 'red';
-  ctx.fillText('N', px_letter_circle[2] - 5, py_letter_circle[2]);
-  ctx.fillStyle = 'black';
-  ctx.fillText('S', px_letter_circle[0] - 4, py_letter_circle[0] + 9);
-  ctx.fillText('O', px_letter_circle[1] - 2, py_letter_circle[1] + 5);
-  ctx.fillText('W', px_letter_circle[3] - 10, py_letter_circle[3] + 5);
+  ctx2d.font = '12px serif';
+  ctx2d.fillStyle = 'red';
+  ctx2d.fillText('N', px_letter_circle[2] - 5, py_letter_circle[2]);
+  ctx2d.fillStyle = 'black';
+  ctx2d.fillText('S', px_letter_circle[0] - 4, py_letter_circle[0] + 9);
+  ctx2d.fillText('O', px_letter_circle[1] - 2, py_letter_circle[1] + 5);
+  ctx2d.fillText('W', px_letter_circle[3] - 10, py_letter_circle[3] + 5);
 
-  ctx.restore();
+  ctx2d.restore();
 }
 
 /**
  * Draw all areas of an object as red rectangles
- * @param {object} ctx - 2d context. If null the 2d context is retrieved from the canvas element automatically
  * @param {object} obj - JavaScript object with holds the object whose areas are to be drawn
  */
-function drawObjectAreas(ctx, obj) {
-    if (ctx == null) ctx = canvas.getContext('2d');
-
-    ctx.strokeStyle = 'red';
+function drawObjectAreas(obj) {
+    ctx2d.strokeStyle = 'red';
 
     obj.areas.forEach(function(a) {
-        ctx.strokeRect((a.x-posx)/(ih*posz/vh), (a.y-posy)/(ih*posz/vh), a.width/(ih*posz/vh), a.height/(ih*posz/vh));
+        ctx2d.strokeRect((a.x-posx)/(ih*posz/vh), (a.y-posy)/(ih*posz/vh), a.width/(ih*posz/vh), a.height/(ih*posz/vh));
     });
 }
 
@@ -588,7 +584,7 @@ function loadingAnimation(rad=0.0) {
     ctx2d.arc(x, y, 50, 0, Math.PI * 2, true);
     ctx2d.fill();
 
-    drawCompass(ctx2d, x, y, rad);
+    drawCompass(x, y, rad);
 
     ctx2d.save();
     ctx2d.font = '32px serif';
@@ -608,23 +604,19 @@ function loadingAnimation(rad=0.0) {
  * things to the canvas element.
  */
 function draw() {
-    if (canvas.getContext) {
-        var ctx = canvas.getContext('2d');
+    // For x (vertical) axis infinit scrolling is supported. If the area where
+    // left and right end of the picture meet is visible, we need special handling.
+    if (posx < 0) {
+        ctx2d.drawImage(pano, iw+posx-1, posy, vr*ih*posz, posz*ih, 0, 0, vw, vh);
+    }
 
-        // For x (vertical) axis infinit scrolling is supported. If the area where
-        // left and right end of the picture meet is visible, we need special handling.
-        if (posx < 0) {
-            ctx.drawImage(pano, iw+posx-1, posy, vr*ih*posz, posz*ih, 0, 0, vw, vh);
-        }
+    ctx2d.drawImage(pano, posx, posy, vr*ih*posz, posz*ih, 0, 0, vw, vh);
 
-        ctx.drawImage(pano, posx, posy, vr*ih*posz, posz*ih, 0, 0, vw, vh);
+    drawCompass(vw - 75, 75, ((Math.PI*2)/iw)*(nx_pos-vw/2*ih*posz/vh-posx));
 
-        drawCompass(ctx, vw - 75, 75, ((Math.PI*2)/iw)*(nx_pos-vw/2*ih*posz/vh-posx));
-
-        if (draw_all_object_areas) {
-            objects.forEach(function(o) {
-                drawObjectAreas(ctx, o);
-            });
-        }
+    if (draw_all_object_areas) {
+        objects.forEach(function(o) {
+            drawObjectAreas(o);
+        });
     }
 }
