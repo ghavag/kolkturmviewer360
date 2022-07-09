@@ -1,8 +1,8 @@
-#wktv {
+#kolkturmviewer {
     height: 100vh;
 }
 
-#ktv {
+#kolkturmviewer canvas {
     vertical-align: bottom;
 }
 

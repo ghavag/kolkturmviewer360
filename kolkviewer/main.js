@@ -55,15 +55,14 @@ var draw_object_areas_on_mouseover = false;
 
 /**
  * Init function for the Kolkturm Viewer 360 called once the page has loaded
- * @param {string} canvas_id - ID of the <canvas /> element (main drawing area)
  * @param {string} data_url - URL pointing to the json file which is the central information base
  */
-function initKolkViewer(canvas_id, data_url) {
+function initKolkViewer(data_url) {
     var json_request = new XMLHttpRequest();
 
-    canvas = $("#" + canvas_id).get(0);
+    wrapper = $("#kolkturmviewer");
+    canvas = $("<canvas>").appendTo(wrapper).get(0);
     ctx2d = canvas.getContext('2d');
-    wrapper = $(canvas).parent();
     objinfo_div = $("<div>", { class: "ktv-objinfo" }).appendTo(wrapper);
 
     vw = $(wrapper).width();
