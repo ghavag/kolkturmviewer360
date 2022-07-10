@@ -1,0 +1,2238 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 3.4996593 4.8180555"
+   version="1.1"
+   id="svg704"
+   sodipodi:docname="mouse_left_button.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
+   width="3.4996593"
+   height="4.8180556">
+  <metadata
+     id="metadata708">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1136"
+     id="namedview706"
+     showgrid="false"
+     inkscape:zoom="13.87"
+     inkscape:cx="12.494425"
+     inkscape:cy="-10.281945"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg704"
+     fit-margin-left="0.1"
+     fit-margin-top="0.1"
+     fit-margin-right="0.1"
+     fit-margin-bottom="0.1" />
+  <style
+     type="text/css"
+     id="style2" />
+  <defs
+     id="defs590">
+    <!-- ** Wii Remote and Classic Controller D-Pad. ** -->
+    <radialGradient
+       id="dpad_gradient"
+       cx="0.5"
+       cy="0.5"
+       r="0.5"
+       fx="0.5"
+       fy="0.5">
+      <stop
+         offset="0"
+         stop-color="#fff"
+         id="stop4" />
+      <stop
+         offset="1"
+         stop-color="#ccc"
+         id="stop6" />
+    </radialGradient>
+    <path
+       id="dpad_shape"
+       d="m 1,12 h 10 q 1,0 1,-1 V 1 q 0,-1 1,-1 h 10 q 1,0 1,1 v 10 q 0,1 1,1 h 10 q 1,0 1,1 v 10 q 0,1 -1,1 H 25 q -1,0 -1,1 v 10 q 0,1 -1,1 H 13 q -1,0 -1,-1 V 25 q 0,-1 -1,-1 H 1 Q 0,24 0,23 V 13 q 0,-1 1,-1 z"
+       inkscape:connector-curvature="0" />
+    <clipPath
+       id="dpad_clip"
+       clipPathUnits="userSpaceOnUse">
+      <use
+         xlink:href="#dpad_shape"
+         x="0"
+         y="0"
+         id="use10"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <symbol
+       id="dpad"
+       viewBox="-1.5 -1.5 39 39">
+      <!-- DEBUG: rect x="-5" y="-5" width="50" height="50" fill="silver"/ -->
+      <!-- Shadow. -->
+      <use
+         xlink:href="#dpad_shape"
+         x="1"
+         y="1"
+         id="use13"
+         style="opacity:0.88700005;fill:#000000;stroke:#000000;stroke-width:1"
+         width="100%"
+         height="100%" />
+      <!-- Base. -->
+      <use
+         xlink:href="#dpad_shape"
+         x="0"
+         y="0"
+         id="use15"
+         style="fill:url(#dpad_gradient);stroke:none"
+         width="100%"
+         height="100%" />
+      <!-- Trick for creating highlights and shadows. -->
+      <g
+         clip-path="url(#dpad_clip)"
+         id="g19">
+        <use
+           xlink:href="#dpad_shape"
+           x="-0.5"
+           y="-0.5"
+           id="use17"
+           style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:0.5"
+           width="100%"
+           height="100%" />
+      </g>
+      <g
+         clip-path="url(#dpad_clip)"
+         id="g23">
+        <use
+           xlink:href="#dpad_shape"
+           x="0.5"
+           y="0.5"
+           id="use21"
+           style="fill:none;stroke:#ffffff;stroke-width:2;stroke-opacity:0.5"
+           width="100%"
+           height="100%" />
+      </g>
+      <!-- The dark outline. -->
+      <use
+         xlink:href="#dpad_shape"
+         x="0"
+         y="0"
+         id="use25"
+         style="fill:none;stroke:#000000;stroke-width:1"
+         width="100%"
+         height="100%" />
+      <!-- Directional ticks. -->
+      <path
+         d="m 4,18 h 7 m 21,0 H 25 M 18,4 v 7 m 0,21 v -7"
+         id="path27"
+         inkscape:connector-curvature="0"
+         style="fill:none;stroke:#909090;stroke-width:1" />
+    </symbol>
+    <linearGradient
+       id="dpad_press_gradient"
+       x1="0"
+       y1="0"
+       x2="0"
+       y2="1">
+      <stop
+         offset="0.5"
+         stop-color="#0094ff"
+         stop-opacity="0.75"
+         id="stop30" />
+      <stop
+         offset="1.0"
+         stop-color="#0094ff"
+         stop-opacity="0"
+         id="stop32" />
+    </linearGradient>
+    <g
+       id="dpad_press">
+      <rect
+         x="-4.5"
+         y="-16.5"
+         width="9"
+         height="12"
+         id="rect35"
+         style="fill:url(#dpad_press_gradient)" />
+    </g>
+    <symbol
+       id="dpad_up"
+       viewBox="0 0 39 39">
+      <use
+         xlink:href="#dpad"
+         x="0"
+         y="0"
+         width="39"
+         height="39"
+         id="use38" />
+      <use
+         xlink:href="#dpad_press"
+         x="0"
+         y="0"
+         transform="translate(19.5,19.5)"
+         id="use40"
+         width="100%"
+         height="100%" />
+    </symbol>
+    <symbol
+       id="dpad_right"
+       viewBox="0 0 39 39">
+      <use
+         xlink:href="#dpad"
+         x="0"
+         y="0"
+         width="39"
+         height="39"
+         id="use43" />
+      <use
+         xlink:href="#dpad_press"
+         x="0"
+         y="0"
+         transform="rotate(90,0,19.5)"
+         id="use45"
+         width="100%"
+         height="100%" />
+    </symbol>
+    <symbol
+       id="dpad_down"
+       viewBox="0 0 39 39">
+      <use
+         xlink:href="#dpad"
+         x="0"
+         y="0"
+         width="39"
+         height="39"
+         id="use48" />
+      <use
+         xlink:href="#dpad_press"
+         x="0"
+         y="0"
+         transform="rotate(180,9.75,9.75)"
+         id="use50"
+         width="100%"
+         height="100%" />
+    </symbol>
+    <symbol
+       id="dpad_left"
+       viewBox="0 0 39 39">
+      <use
+         xlink:href="#dpad"
+         x="0"
+         y="0"
+         width="39"
+         height="39"
+         id="use53" />
+      <use
+         xlink:href="#dpad_press"
+         x="0"
+         y="0"
+         transform="rotate(-90,19.5,0)"
+         id="use55"
+         width="100%"
+         height="100%" />
+    </symbol>
+    <!-- On all buttons and keys in this file, the label is being placed on top of the lighting, which is not accurate, but is good enough and is very easy to implement. -->
+    <!-- ** Wii Remote/Nunchuk/Classic Controller buttons (round shapes). ** -->
+    <!-- Inspired by http://ftpmerou.free.fr/ubuntu/wiimote/wiimote.svg -->
+    <radialGradient
+       id="button_diffuse_gradient"
+       cx="0.40000001"
+       cy="0.40000001"
+       r="0.5"
+       fx="0.66000003"
+       fy="0.66000003">
+      <stop
+         offset="0"
+         stop-color="#ffffff"
+         stop-opacity="1"
+         id="stop58" />
+      <stop
+         offset="1"
+         stop-color="#ffffff"
+         stop-opacity="0.39634147"
+         id="stop60" />
+    </radialGradient>
+    <linearGradient
+       id="button_shiny_specular_gradient"
+       x1="0.333"
+       y1="0.40000001"
+       x2="0.66600001"
+       y2="0.5">
+      <stop
+         offset="0"
+         stop-color="#ffffff"
+         stop-opacity="1"
+         id="stop63" />
+      <stop
+         offset="1"
+         stop-color="#ffffff"
+         stop-opacity="0"
+         id="stop65" />
+    </linearGradient>
+    <symbol
+       id="button_shiny"
+       viewBox="-2 -2 34 34">
+      <!-- DEBUG: rect x="-5" y="-5" width="50" height="50" fill="yellow"/ -->
+      <!-- Shadow. -->
+      <circle
+         cx="15.75"
+         cy="15.75"
+         r="15"
+         id="circle68"
+         style="opacity:0.33300003;fill:#000000;stroke:#000000;stroke-width:1" />
+      <circle
+         cx="15"
+         cy="15"
+         r="15"
+         id="circle70"
+         style="fill:#d0d4d6;stroke:#cbcacf;stroke-width:0.40000001" />
+      <!-- Base. -->
+      <circle
+         cx="15"
+         cy="15"
+         r="15"
+         id="circle72"
+         style="fill:#d0d4d6;stroke:#cbcacf;stroke-width:0.40000001" />
+      <!-- Diffuse lighting. -->
+      <circle
+         cx="16"
+         cy="16.5"
+         r="14"
+         id="circle74"
+         style="fill:url(#button_diffuse_gradient);stroke:none" />
+      <!-- Specular lighting. -->
+      <path
+         d="M 2,20 A 14.25,14.25 0 0 1 24,4 Z"
+         id="path76"
+         inkscape:connector-curvature="0"
+         style="fill:url(#button_shiny_specular_gradient);stroke:none" />
+    </symbol>
+    <linearGradient
+       id="button_matte_specular_gradient"
+       x1="0.333"
+       y1="0.333"
+       x2="0.56"
+       y2="0.56">
+      <stop
+         offset="0"
+         stop-color="#ffffff"
+         stop-opacity="1"
+         id="stop79" />
+      <stop
+         offset="1"
+         stop-color="#ffffff"
+         stop-opacity="0"
+         id="stop81" />
+    </linearGradient>
+    <symbol
+       id="button_matte"
+       viewBox="-2 -2 34 34">
+      <!-- DEBUG: rect x="-5" y="-5" width="50" height="50" fill="yellow"/ -->
+      <!-- Shadow. -->
+      <circle
+         cx="15.75"
+         cy="15.75"
+         r="15"
+         id="circle84"
+         style="opacity:0.88700005;fill:#000000;stroke:#000000;stroke-width:1" />
+      <!-- Base. -->
+      <circle
+         cx="15"
+         cy="15"
+         r="15"
+         id="circle86"
+         style="fill:#d0d4d6;stroke:#8a8993;stroke-width:1" />
+      <!-- Specular lighting. -->
+      <path
+         d="M 2,20 A 14.25,14.25 0 0 1 24,4 Z"
+         id="path88"
+         inkscape:connector-curvature="0"
+         style="fill:url(#button_matte_specular_gradient);stroke:none" />
+    </symbol>
+    <symbol
+       id="button_matte_oval"
+       viewBox="-2 -2 34 34">
+      <!-- DEBUG: rect x="-5" y="-5" width="50" height="50" fill="yellow"/ -->
+      <!-- Shadow. -->
+      <ellipse
+         cx="15.75"
+         cy="15.75"
+         rx="15"
+         ry="11"
+         id="ellipse91"
+         style="opacity:0.88700005;fill:#000000;stroke:#000000;stroke-width:1" />
+      <!-- Base. -->
+      <ellipse
+         cx="15"
+         cy="15"
+         rx="15"
+         ry="11"
+         id="ellipse93"
+         style="fill:#d0d4d6;stroke:#8a8993;stroke-width:1" />
+      <!-- Specular lighting. -->
+      <path
+         d="M 2,18 A 13.75,9.75 0 0 1 23,7 Z"
+         id="path95"
+         inkscape:connector-curvature="0"
+         style="fill:url(#button_matte_specular_gradient);stroke:none" />
+    </symbol>
+    <linearGradient
+       id="button_inset_shadow"
+       x1="0"
+       y1="0"
+       x2="1"
+       y2="1">
+      <stop
+         offset="0"
+         stop-color="#000000"
+         stop-opacity="1"
+         id="stop98" />
+      <stop
+         offset="1"
+         stop-color="#ffffff"
+         stop-opacity="1"
+         id="stop100" />
+    </linearGradient>
+    <symbol
+       id="button_inset"
+       viewBox="-2 -2 34 34">
+      <!-- DEBUG: rect x="-5" y="-5" width="50" height="50" fill="yellow"/ -->
+      <!-- Shadow. -->
+      <circle
+         cx="15"
+         cy="15"
+         r="16.9"
+         id="circle103"
+         style="fill:url(#button_inset_shadow);stroke:none" />
+      <!-- Base. -->
+      <circle
+         cx="15"
+         cy="15"
+         r="15"
+         id="circle105"
+         style="fill:#d0d4d6;stroke:#8a8993;stroke-width:1" />
+      <!-- Specular lighting. -->
+      <path
+         d="M 2,20 A 14.25,14.25 0 0 1 24,4 Z"
+         id="path107"
+         inkscape:connector-curvature="0"
+         style="fill:url(#button_matte_specular_gradient);stroke:none" />
+    </symbol>
+    <symbol
+       id="home_outline"
+       viewBox="0 0 16 16">
+      <path
+         d="m 8,0 8,8 h -2 v 8 H 2 V 8 H 0 Z M 6,8 v 4 h 4 V 8 Z"
+         id="path110"
+         inkscape:connector-curvature="0"
+         style="fill:#34beed" />
+    </symbol>
+    <symbol
+       id="power_outline"
+       viewBox="0 0 16 16">
+      <path
+         d="M 8,1 V 8 M 5.5,3 a 5.5,5.5 0 1 0 5,0"
+         id="path113"
+         inkscape:connector-curvature="0"
+         style="fill:none;stroke:#cc3333;stroke-width:1.5;stroke-linecap:round" />
+    </symbol>
+    <symbol
+       id="button_A"
+       viewBox="0 0 34 34">
+      <use
+         xlink:href="#button_shiny"
+         x="0"
+         y="0"
+         width="34"
+         height="34"
+         id="use116" />
+      <text
+         x="17"
+         y="17"
+         font-size="15px"
+         dominant-baseline="central"
+         id="text118"
+         style="font-size:15px;font-family:Arial, sans-serif;dominant-baseline:central;text-anchor:middle;fill:#909090">A</text>
+    </symbol>
+    <symbol
+       id="button_minus"
+       viewBox="0 0 34 34">
+      <use
+         xlink:href="#button_matte"
+         x="0"
+         y="0"
+         width="34"
+         height="34"
+         id="use121" />
+      <line
+         x1="10"
+         y1="17"
+         x2="24"
+         y2="17"
+         id="line123"
+         style="stroke:#909090;stroke-width:1.5;stroke-linecap:round" />
+    </symbol>
+    <symbol
+       id="button_plus"
+       viewBox="0 0 34 34">
+      <use
+         xlink:href="#button_matte"
+         x="0"
+         y="0"
+         width="34"
+         height="34"
+         id="use126" />
+      <line
+         x1="10"
+         y1="17"
+         x2="24"
+         y2="17"
+         id="line128"
+         style="stroke:#909090;stroke-width:1.5;stroke-linecap:round" />
+      <line
+         x1="17"
+         y1="10"
+         x2="17"
+         y2="24"
+         id="line130"
+         style="stroke:#909090;stroke-width:1.5;stroke-linecap:round" />
+    </symbol>
+    <symbol
+       id="button_1"
+       viewBox="0 0 34 34">
+      <use
+         xlink:href="#button_matte"
+         x="0"
+         y="0"
+         width="34"
+         height="34"
+         id="use133" />
+      <text
+         x="17"
+         y="17"
+         font-size="15px"
+         dominant-baseline="central"
+         id="text135"
+         style="font-size:15px;font-family:Arial, sans-serif;dominant-baseline:central;text-anchor:middle;fill:#909090">1</text>
+    </symbol>
+    <symbol
+       id="button_2"
+       viewBox="0 0 34 34">
+      <use
+         xlink:href="#button_matte"
+         x="0"
+         y="0"
+         width="34"
+         height="34"
+         id="use138" />
+      <text
+         x="17"
+         y="17"
+         font-size="15px"
+         dominant-baseline="central"
+         id="text140"
+         style="font-size:15px;font-family:Arial, sans-serif;dominant-baseline:central;text-anchor:middle;fill:#909090">2</text>
+    </symbol>
+    <symbol
+       id="button_home"
+       viewBox="0 0 34 34">
+      <use
+         xlink:href="#button_inset"
+         x="0"
+         y="0"
+         width="34"
+         height="34"
+         id="use143" />
+      <use
+         xlink:href="#home_outline"
+         x="8"
+         y="8"
+         width="18"
+         height="18"
+         id="use145" />
+    </symbol>
+    <symbol
+       id="button_power"
+       viewBox="0 0 34 34">
+      <use
+         xlink:href="#button_inset"
+         x="0"
+         y="0"
+         width="34"
+         height="34"
+         id="use148" />
+      <use
+         xlink:href="#power_outline"
+         x="8"
+         y="8"
+         width="18"
+         height="18"
+         id="use150" />
+    </symbol>
+    <symbol
+       id="button_C"
+       viewBox="0 0 34 34">
+      <use
+         xlink:href="#button_matte_oval"
+         x="0"
+         y="0"
+         width="34"
+         height="34"
+         id="use153" />
+      <text
+         x="17"
+         y="17"
+         font-size="15px"
+         dominant-baseline="central"
+         id="text155"
+         style="font-size:15px;font-family:Arial, sans-serif;dominant-baseline:central;text-anchor:middle;fill:#909090">C</text>
+    </symbol>
+    <symbol
+       id="button_classic_a"
+       viewBox="0 0 34 34">
+      <use
+         xlink:href="#button_shiny"
+         x="0"
+         y="0"
+         width="34"
+         height="34"
+         id="use158" />
+      <text
+         x="17"
+         y="17"
+         font-size="15px"
+         dominant-baseline="central"
+         id="text160"
+         style="font-size:15px;font-family:Arial, sans-serif;dominant-baseline:central;text-anchor:middle;fill:#909090">a</text>
+    </symbol>
+    <symbol
+       id="button_classic_b"
+       viewBox="0 0 34 34">
+      <use
+         xlink:href="#button_shiny"
+         x="0"
+         y="0"
+         width="34"
+         height="34"
+         id="use163" />
+      <text
+         x="17"
+         y="17"
+         font-size="15px"
+         dominant-baseline="central"
+         id="text165"
+         style="font-size:15px;font-family:Arial, sans-serif;dominant-baseline:central;text-anchor:middle;fill:#909090">b</text>
+    </symbol>
+    <symbol
+       id="button_classic_x"
+       viewBox="0 0 34 34">
+      <use
+         xlink:href="#button_matte"
+         x="0"
+         y="0"
+         width="34"
+         height="34"
+         id="use168" />
+      <text
+         x="17"
+         y="17"
+         font-size="15px"
+         dominant-baseline="central"
+         id="text170"
+         style="font-size:15px;font-family:Arial, sans-serif;dominant-baseline:central;text-anchor:middle;fill:#909090">x</text>
+    </symbol>
+    <symbol
+       id="button_classic_y"
+       viewBox="0 0 34 34">
+      <use
+         xlink:href="#button_matte"
+         x="0"
+         y="0"
+         width="34"
+         height="34"
+         id="use173" />
+      <text
+         x="17"
+         y="17"
+         font-size="15px"
+         dominant-baseline="central"
+         id="text175"
+         style="font-size:15px;font-family:Arial, sans-serif;dominant-baseline:central;text-anchor:middle;fill:#909090">y</text>
+    </symbol>
+    <symbol
+       id="button_classic_ZL"
+       viewBox="0 0 34 34">
+      <use
+         xlink:href="#button_matte_oval"
+         x="0"
+         y="0"
+         width="34"
+         height="34"
+         id="use178" />
+      <text
+         x="17"
+         y="17"
+         font-size="15px"
+         dominant-baseline="central"
+         id="text180"
+         style="font-size:15px;font-family:Arial, sans-serif;dominant-baseline:central;text-anchor:middle;fill:#909090">ZL</text>
+    </symbol>
+    <symbol
+       id="button_classic_ZR"
+       viewBox="0 0 34 34">
+      <use
+         xlink:href="#button_matte_oval"
+         x="0"
+         y="0"
+         width="34"
+         height="34"
+         id="use183" />
+      <text
+         x="17"
+         y="17"
+         font-size="15px"
+         dominant-baseline="central"
+         id="text185"
+         style="font-size:15px;font-family:Arial, sans-serif;dominant-baseline:central;text-anchor:middle;fill:#909090">ZR</text>
+    </symbol>
+    <!-- ** Wii Remote B button (custom shape). ** -->
+    <radialGradient
+       id="button_B_gradient1"
+       cx="0.5"
+       cy="0.25"
+       r="0.5"
+       fx="0.5"
+       fy="-0.25">
+      <stop
+         offset="0"
+         stop-color="#000000"
+         stop-opacity="0.5"
+         id="stop188" />
+      <stop
+         offset="1"
+         stop-color="#000000"
+         stop-opacity="0"
+         id="stop190" />
+    </radialGradient>
+    <radialGradient
+       id="button_B_gradient2"
+       cx="0.5"
+       cy="0.5"
+       r="0.66600001"
+       fx="0.25"
+       fy="0.25">
+      <stop
+         offset="0"
+         stop-color="#ffffff"
+         stop-opacity="1"
+         id="stop193" />
+      <stop
+         offset="1"
+         stop-color="#ffffff"
+         stop-opacity="0"
+         id="stop195" />
+    </radialGradient>
+    <symbol
+       id="button_B"
+       viewBox="-2 -2 34 34">
+      <!-- DEBUG: rect x="-5" y="-5" width="50" height="50" fill="yellow"/ -->
+      <!-- Shadow. -->
+      <rect
+         x="4.5"
+         y="0.75"
+         width="22"
+         height="30"
+         rx="2"
+         id="rect198"
+         style="opacity:0.88700005;fill:#000000;stroke:#000000;stroke-width:1" />
+      <!-- Base. -->
+      <rect
+         x="4"
+         y="0"
+         width="22"
+         height="30"
+         rx="2"
+         id="rect200"
+         style="fill:#d0d4d6;stroke:#8a8993;stroke-width:1" />
+      <!-- Specular lighting. -->
+      <path
+         d="m 3.5,0.5 a 12,18 0 0 0 23,0 z"
+         id="path202"
+         inkscape:connector-curvature="0"
+         style="fill:url(#button_B_gradient1);stroke:none" />
+      <path
+         d="m 4.5,28.5 a 12,8 0 0 1 21,0 z"
+         id="path204"
+         inkscape:connector-curvature="0"
+         style="fill:url(#button_B_gradient2);stroke:none" />
+      <!-- The label is placed incorrectly here. In the actual controller, it is placed at the edge. In this graphic, it is just centered, which makes it easier to read. -->
+      <text
+         x="15"
+         y="15"
+         font-size="15px"
+         dominant-baseline="central"
+         id="text206"
+         style="font-size:15px;font-family:Arial, sans-serif;dominant-baseline:central;text-anchor:middle;fill:#909090">B</text>
+    </symbol>
+    <radialGradient
+       id="button_Z_gradient1"
+       cx="0.5"
+       cy="0.25"
+       r="1"
+       fx="0.5"
+       fy="-0.0625"
+       gradientTransform="matrix(0.175,0,0,1,0.0875,0)">
+      <stop
+         offset="0"
+         stop-color="#ffffff"
+         stop-opacity="1"
+         id="stop209" />
+      <stop
+         offset="1"
+         stop-color="#ffffff"
+         stop-opacity="0"
+         id="stop211" />
+    </radialGradient>
+    <!-- ** Wii Nunchuk Z button (custom shape). ** -->
+    <symbol
+       id="button_Z"
+       viewBox="-2 -2 34 34">
+      <!-- DEBUG: rect x="-5" y="-5" width="50" height="50" fill="yellow"/ -->
+      <!-- Shadow. -->
+      <rect
+         x="0.5"
+         y="1.75"
+         width="30"
+         height="28"
+         rx="2"
+         id="rect214"
+         style="opacity:0.88700005;fill:#000000;stroke:#000000;stroke-width:1" />
+      <!-- Base. -->
+      <rect
+         x="0"
+         y="1"
+         width="30"
+         height="28"
+         rx="2"
+         id="rect216"
+         style="fill:#d0d4d6;stroke:#8a8993;stroke-width:1" />
+      <!-- Specular lighting. -->
+      <rect
+         x="2"
+         y="1.5"
+         width="26"
+         height="27"
+         id="rect218"
+         style="fill:url(#button_Z_gradient1);stroke:none" />
+      <text
+         x="15"
+         y="15"
+         font-size="15px"
+         dominant-baseline="central"
+         id="text220"
+         style="font-size:15px;font-family:Arial, sans-serif;dominant-baseline:central;text-anchor:middle;fill:#909090">Z</text>
+    </symbol>
+    <!-- ** Wii Classic Controller L and R buttons (custom shape). ** -->
+    <symbol
+       id="button_long_LR"
+       viewBox="-2 -2 34 34">
+      <!-- DEBUG: rect x="-5" y="-5" width="50" height="50" fill="yellow"/ -->
+      <!-- Shadow. -->
+      <rect
+         x="0.5"
+         y="7.5"
+         width="30"
+         height="16"
+         rx="8"
+         id="rect223"
+         style="opacity:0.88700005;fill:#000000;stroke:#000000;stroke-width:1" />
+      <!-- Base. -->
+      <rect
+         x="0"
+         y="7"
+         width="30"
+         height="16"
+         rx="8"
+         id="rect225"
+         style="fill:#d0d4d6;stroke:#8a8993;stroke-width:1" />
+      <!-- Specular lighting. -->
+      <rect
+         x="1"
+         y="8"
+         width="28"
+         height="14"
+         rx="8"
+         id="rect227"
+         style="fill:url(#button_Z_gradient1);stroke:none" />
+    </symbol>
+    <symbol
+       id="button_classic_L"
+       viewBox="0 0 34 34">
+      <use
+         xlink:href="#button_long_LR"
+         x="0"
+         y="0"
+         width="34"
+         height="34"
+         id="use230" />
+      <text
+         x="17"
+         y="17"
+         font-size="15px"
+         dominant-baseline="central"
+         id="text232"
+         style="font-size:15px;font-family:Arial, sans-serif;dominant-baseline:central;text-anchor:middle;fill:#909090">L</text>
+    </symbol>
+    <symbol
+       id="button_classic_R"
+       viewBox="0 0 34 34">
+      <use
+         xlink:href="#button_long_LR"
+         x="0"
+         y="0"
+         width="34"
+         height="34"
+         id="use235" />
+      <text
+         x="17"
+         y="17"
+         font-size="15px"
+         dominant-baseline="central"
+         id="text237"
+         style="font-size:15px;font-family:Arial, sans-serif;dominant-baseline:central;text-anchor:middle;fill:#909090">R</text>
+    </symbol>
+    <!-- ** Analog stick from Wii Nunchuk or Classic Controller. ** -->
+    <radialGradient
+       id="analog_stick_gradient1"
+       cx="0.5"
+       cy="0.5"
+       r="0.5">
+      <stop
+         offset="0"
+         stop-color="#fff"
+         id="stop240" />
+      <stop
+         offset="1"
+         stop-color="#eee"
+         id="stop242" />
+    </radialGradient>
+    <linearGradient
+       id="analog_stick_gradient2"
+       x1="0"
+       y1="0.5"
+       x2="0"
+       y2="1">
+      <stop
+         offset="0"
+         stop-color="#fff"
+         id="stop245" />
+      <stop
+         offset="1"
+         stop-color="#ccc"
+         id="stop247" />
+    </linearGradient>
+    <linearGradient
+       id="analog_stick_gradient3"
+       x1="0"
+       y1="0.5"
+       x2="0"
+       y2="1">
+      <stop
+         offset="0.5"
+         stop-color="#999"
+         id="stop250" />
+      <stop
+         offset="1"
+         stop-color="#ccc"
+         id="stop252" />
+    </linearGradient>
+    <radialGradient
+       id="analog_stick_shadow"
+       cx="0.5"
+       cy="0.5"
+       r="0.5">
+      <stop
+         offset="0.5"
+         stop-color="#000"
+         stop-opacity="1"
+         id="stop255" />
+      <stop
+         offset="1"
+         stop-color="#000"
+         stop-opacity="0"
+         id="stop257" />
+    </radialGradient>
+    <!-- Based on http://www.mariowiki.com/File:Def_Stick.svg -->
+    <symbol
+       id="analog_stick"
+       viewBox="0 0 32 32">
+      <!-- DEBUG: rect x="-5" y="-5" width="50" height="50" fill="lime"/ -->
+      <!-- Base. -->
+      <ellipse
+         cx="16"
+         cy="21"
+         rx="10"
+         ry="9"
+         id="ellipse260"
+         style="fill:url(#analog_stick_gradient3);stroke:#000000;stroke-width:0.80000001" />
+      <!-- Shadow. -->
+      <ellipse
+         cx="17"
+         cy="17"
+         rx="15"
+         ry="12"
+         id="ellipse262"
+         style="opacity:0.88700005;fill:url(#analog_stick_shadow);stroke:none" />
+      <!-- Thumb stick. -->
+      <ellipse
+         cx="16"
+         cy="13"
+         rx="15"
+         ry="12"
+         id="ellipse264"
+         style="fill:url(#analog_stick_gradient2);stroke:#000000;stroke-width:0.80000001" />
+      <ellipse
+         cx="16"
+         cy="10"
+         rx="11"
+         ry="8"
+         id="ellipse266"
+         style="fill:url(#analog_stick_gradient1);stroke:#777777;stroke-width:0.40000001" />
+    </symbol>
+    <symbol
+       id="twin_analog_sticks"
+       viewBox="0 0 2 1">
+      <use
+         xlink:href="#analog_stick"
+         x="0"
+         y="0"
+         width="1"
+         height="1"
+         id="use269" />
+      <use
+         xlink:href="#analog_stick"
+         x="1"
+         y="0"
+         width="1"
+         height="1"
+         id="use271" />
+    </symbol>
+    <!-- ** A computer mouse. ** -->
+    <radialGradient
+       id="mouse_gradient"
+       cx="0.5"
+       cy="0.5"
+       r="0.5"
+       fx="0.5"
+       fy="0.75">
+      <stop
+         offset="0"
+         stop-color="#fff"
+         id="stop274" />
+      <stop
+         offset="1"
+         stop-color="#ccc"
+         id="stop276" />
+    </radialGradient>
+    <radialGradient
+       id="mouse_specular_gradient"
+       cx="0.5"
+       cy="0.25"
+       r="1"
+       fx="0.5"
+       fy="-0.0625"
+       gradientTransform="matrix(0.333,0,0,1,0.1665,0)">
+      <stop
+         offset="0"
+         stop-color="#ffffff"
+         stop-opacity="1"
+         id="stop279" />
+      <stop
+         offset="1"
+         stop-color="#ffffff"
+         stop-opacity="0"
+         id="stop281" />
+    </radialGradient>
+    <linearGradient
+       id="mouse_wheel_gradient_up"
+       x1="0"
+       y1="0"
+       x2="0"
+       y2="1">
+      <stop
+         offset="0.333"
+         stop-color="#0094ff"
+         stop-opacity="0.75"
+         id="stop284" />
+      <stop
+         offset="0.666"
+         stop-color="#0094ff"
+         stop-opacity="0"
+         id="stop286" />
+    </linearGradient>
+    <linearGradient
+       id="mouse_wheel_gradient_down"
+       xlink:href="#mouse_wheel_gradient_up"
+       gradientTransform="matrix(1,0,0,-1,0,1)" />
+    <path
+       id="mouse_shape"
+       d="m 16,0 q 8,0 9,4 4,16 0,24 -2,4 -9,4 Q 9,32 7,28 3,20 7,4 8,0 16,0 Z"
+       inkscape:connector-curvature="0" />
+    <path
+       id="mouse_left_button"
+       d="m 16,0 v 2 q -2,0 -2,6 0,6 2,6 v 2 Q 7,16 7,12 V 0 Z"
+       clip-path="url(#mouse_clip)"
+       inkscape:connector-curvature="0" />
+    <use
+       id="mouse_right_button"
+       xlink:href="#mouse_left_button"
+       x="0"
+       y="0"
+       transform="matrix(-1,0,0,1,32,0)"
+       width="100%"
+       height="100%" />
+    <path
+       id="mouse_wheel"
+       d="m 16,2 q -2,0 -2,6 0,6 2,6 2,0 2,-6 0,-6 -2,-6 z"
+       inkscape:connector-curvature="0" />
+    <clipPath
+       id="mouse_clip"
+       clipPathUnits="userSpaceOnUse">
+      <use
+         xlink:href="#mouse_shape"
+         x="0"
+         y="0"
+         id="use294"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <!-- Inspired by https://openclipart.org/detail/211818/mouse -->
+    <symbol
+       id="mouse"
+       viewBox="2 -2 28 36">
+      <!-- DEBUG: rect x="-5" y="-5" width="50" height="50" fill="lime"/ -->
+      <!-- Shadow. -->
+      <use
+         xlink:href="#mouse_shape"
+         x="1"
+         y="0.5"
+         id="use297"
+         style="opacity:0.88700005;fill:#000000;stroke:#000000;stroke-width:1"
+         width="100%"
+         height="100%" />
+      <!-- Base. -->
+      <use
+         xlink:href="#mouse_shape"
+         x="0"
+         y="0"
+         id="use299"
+         style="fill:url(#mouse_gradient);stroke:none"
+         width="100%"
+         height="100%" />
+      <!-- Specular lighting. -->
+      <rect
+         x="3"
+         y="0"
+         width="26"
+         height="32"
+         clip-path="url(#mouse_clip)"
+         id="rect301"
+         style="fill:url(#mouse_specular_gradient)" />
+      <!-- Buttons. -->
+      <use
+         xlink:href="#mouse_left_button"
+         x="0"
+         y="0"
+         id="use303"
+         style="fill:none;stroke:#8a8993;stroke-width:0.25"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#mouse_right_button"
+         x="0"
+         y="0"
+         id="use305"
+         style="fill:none;stroke:#8a8993;stroke-width:0.25"
+         width="100%"
+         height="100%" />
+      <!-- The dark outline. -->
+      <use
+         xlink:href="#mouse_shape"
+         x="0"
+         y="0"
+         id="use307"
+         style="fill:none;stroke:#8a8993;stroke-width:0.5"
+         width="100%"
+         height="100%" />
+    </symbol>
+    <symbol
+       id="mouse_left"
+       viewBox="0 0 28 36">
+      <use
+         xlink:href="#mouse"
+         x="0"
+         y="0"
+         width="28"
+         height="36"
+         id="use310" />
+      <use
+         xlink:href="#mouse_left_button"
+         x="-2"
+         y="2"
+         id="use312"
+         style="fill:url(#dpad_press_gradient);stroke:none"
+         width="100%"
+         height="100%" />
+    </symbol>
+    <symbol
+       id="mouse_right"
+       viewBox="0 0 28 36">
+      <use
+         xlink:href="#mouse"
+         x="0"
+         y="0"
+         width="28"
+         height="36"
+         id="use315" />
+      <use
+         xlink:href="#mouse_right_button"
+         x="-2"
+         y="2"
+         id="use317"
+         style="fill:url(#dpad_press_gradient);stroke:none"
+         width="100%"
+         height="100%" />
+    </symbol>
+    <symbol
+       id="mouse_up"
+       viewBox="0 0 28 36">
+      <use
+         xlink:href="#mouse"
+         x="0"
+         y="0"
+         width="28"
+         height="36"
+         id="use320" />
+      <use
+         xlink:href="#mouse_wheel"
+         x="-2"
+         y="2"
+         id="use322"
+         style="fill:url(#mouse_wheel_gradient_up);stroke:none"
+         width="100%"
+         height="100%" />
+    </symbol>
+    <symbol
+       id="mouse_down"
+       viewBox="0 0 28 36">
+      <use
+         xlink:href="#mouse"
+         x="0"
+         y="0"
+         width="28"
+         height="36"
+         id="use325" />
+      <use
+         xlink:href="#mouse_wheel"
+         x="-2"
+         y="2"
+         id="use327"
+         style="fill:url(#mouse_wheel_gradient_down);stroke:none"
+         width="100%"
+         height="100%" />
+    </symbol>
+    <!-- ** A key from a keyboard. ** -->
+    <linearGradient
+       id="key_gradient1"
+       x1="0"
+       y1="0"
+       x2="0"
+       y2="1">
+      <stop
+         offset="0"
+         stop-color="#d8d8d8"
+         id="stop330" />
+      <stop
+         offset="1"
+         stop-color="#a3a3a3"
+         id="stop332" />
+    </linearGradient>
+    <linearGradient
+       id="key_gradient2"
+       x1="0"
+       y1="0"
+       x2="1"
+       y2="0">
+      <stop
+         offset="0"
+         stop-color="#cccccc"
+         id="stop335" />
+      <stop
+         offset="0.666"
+         stop-color="#eeeeee"
+         id="stop337" />
+      <stop
+         offset="1"
+         stop-color="#cccccc"
+         id="stop339" />
+    </linearGradient>
+    <!-- Inspired by https://openclipart.org/detail/27549/keyboard-keys -->
+    <symbol
+       id="key"
+       viewBox="-2 -2 36 32">
+      <!-- DEBUG: rect x="-5" y="-5" width="50" height="50" fill="lime"/ -->
+      <!-- Shadow. -->
+      <rect
+         x="1"
+         y="1"
+         width="32"
+         height="28"
+         rx="4"
+         id="rect342"
+         style="fill:#000000;stroke:#000000;stroke-width:0.5" />
+      <!-- Base. -->
+      <rect
+         x="0"
+         y="0"
+         width="32"
+         height="28"
+         rx="4"
+         id="rect344"
+         style="fill:url(#key_gradient1);stroke:#8a8993;stroke-width:0.5" />
+      <rect
+         x="3"
+         y="2"
+         width="26"
+         height="23"
+         rx="3"
+         id="rect346"
+         style="fill:url(#key_gradient2);stroke:#8a8993;stroke-width:0.25" />
+    </symbol>
+    <!-- ** Symbols for keyboard keys. For an arbitrary reason, they are restricted to 13x13. ** -->
+    <path
+       id="arrow_up"
+       d="M 2,0 4,5 H 2.5 v 8 h -1 V 5 H 0 Z"
+       inkscape:connector-curvature="0" />
+    <use
+       id="arrow_right"
+       xlink:href="#arrow_up"
+       x="0"
+       y="0"
+       transform="rotate(90,6.5,6.5)"
+       width="100%"
+       height="100%" />
+    <use
+       id="arrow_down"
+       xlink:href="#arrow_up"
+       x="0"
+       y="0"
+       transform="rotate(180,2,6.5)"
+       width="100%"
+       height="100%" />
+    <use
+       id="arrow_left"
+       xlink:href="#arrow_up"
+       x="0"
+       y="0"
+       transform="rotate(-90,2,2)"
+       width="100%"
+       height="100%" />
+    <path
+       id="arrow_enter"
+       d="M 0,10 5,8 v 1.5 h 7 v -8 h 1 v 9 H 5 V 12 Z"
+       inkscape:connector-curvature="0" />
+    <symbol
+       id="volume_down"
+       viewBox="0 0 13 13">
+      <path
+         d="M 0,3 H 2 L 4,0.5 q 2,4 0,8 L 2,6 H 0 Z"
+         id="path354"
+         inkscape:connector-curvature="0" />
+      <path
+         d="M 7,4 Q 6.5,4.5 7,5 h 5 q 0.5,-0.5 0,-1 z"
+         id="path356"
+         inkscape:connector-curvature="0" />
+    </symbol>
+    <symbol
+       id="volume_up"
+       viewBox="0 0 13 13">
+      <use
+         xlink:href="#volume_down"
+         x="0"
+         y="0"
+         width="13"
+         height="13"
+         id="use359" />
+      <path
+         d="M 9,2 Q 9.5,1.5 10,2 V 7 Q 9.5,7.5 9,7 Z"
+         id="path361"
+         inkscape:connector-curvature="0" />
+      <!-- DEBUG: path d="
+		M0,0 h0.1 v13 h-0.1 z
+		M13,0 h-0.1 v13 h0.1 z
+		M0,0 v0.1 h13 v-0.1 z
+		M0,13 v-0.1 h13 v0.1 z
+		M0,6.5 v-0.1 h13 v0.2 z
+	" /-->
+    </symbol>
+    <path
+       id="play"
+       d="M 0,0 5.2,3 0,6 Z"
+       inkscape:connector-curvature="0" />
+    <path
+       id="pause"
+       d="M 0,0 H 2 V 6 H 0 Z M 4,0 H 6 V 6 H 4 Z"
+       inkscape:connector-curvature="0" />
+    <path
+       id="stop"
+       d="M 0,0 H 6 V 6 H 0 Z"
+       inkscape:connector-curvature="0" />
+    <symbol
+       id="play_pause"
+       viewBox="0 0 13 13">
+      <use
+         xlink:href="#play"
+         x="0"
+         y="0"
+         width="13"
+         height="13"
+         id="use367" />
+      <use
+         xlink:href="#pause"
+         x="7"
+         y="0"
+         width="13"
+         height="13"
+         id="use369" />
+    </symbol>
+    <symbol
+       id="forward"
+       viewBox="0 0 13 13">
+      <use
+         xlink:href="#play"
+         x="0"
+         y="0"
+         width="13"
+         height="13"
+         id="use372" />
+      <use
+         xlink:href="#play"
+         x="5"
+         y="0"
+         width="13"
+         height="13"
+         id="use374" />
+    </symbol>
+    <symbol
+       id="rewind"
+       viewBox="0 0 13 13">
+      <use
+         xlink:href="#forward"
+         x="0"
+         y="0"
+         width="13"
+         height="13"
+         transform="matrix(-1,0,0,1,10.2,0)"
+         id="use377" />
+    </symbol>
+    <symbol
+       id="next"
+       viewBox="0 0 13 13">
+      <use
+         xlink:href="#forward"
+         x="0"
+         y="0"
+         width="13"
+         height="13"
+         id="use380" />
+      <path
+         d="m 10,0 h 2 v 6 h -2 z"
+         id="path382"
+         inkscape:connector-curvature="0" />
+    </symbol>
+    <symbol
+       id="previous"
+       viewBox="0 0 13 13">
+      <use
+         xlink:href="#next"
+         x="0"
+         y="0"
+         width="13"
+         height="13"
+         transform="matrix(-1,0,0,1,12.2,0)"
+         id="use385" />
+    </symbol>
+    <symbol
+       id="key_up"
+       viewBox="0 0 36 32">
+      <use
+         xlink:href="#key"
+         x="0"
+         y="0"
+         width="36"
+         height="32"
+         id="use388" />
+      <use
+         xlink:href="#arrow_up"
+         x="8"
+         y="8"
+         id="use390"
+         style="fill:#404020"
+         width="100%"
+         height="100%" />
+    </symbol>
+    <symbol
+       id="key_right"
+       viewBox="0 0 36 32">
+      <use
+         xlink:href="#key"
+         x="0"
+         y="0"
+         width="36"
+         height="32"
+         id="use393" />
+      <use
+         xlink:href="#arrow_right"
+         x="8"
+         y="8"
+         id="use395"
+         style="fill:#404020"
+         width="100%"
+         height="100%" />
+    </symbol>
+    <symbol
+       id="key_down"
+       viewBox="0 0 36 32">
+      <use
+         xlink:href="#key"
+         x="0"
+         y="0"
+         width="36"
+         height="32"
+         id="use398" />
+      <use
+         xlink:href="#arrow_down"
+         x="8"
+         y="8"
+         id="use400"
+         style="fill:#404020"
+         width="100%"
+         height="100%" />
+    </symbol>
+    <symbol
+       id="key_left"
+       viewBox="0 0 36 32">
+      <use
+         xlink:href="#key"
+         x="0"
+         y="0"
+         width="36"
+         height="32"
+         id="use403" />
+      <use
+         xlink:href="#arrow_left"
+         x="8"
+         y="8"
+         id="use405"
+         style="fill:#404020"
+         width="100%"
+         height="100%" />
+    </symbol>
+    <symbol
+       id="key_enter"
+       viewBox="0 0 36 32">
+      <use
+         xlink:href="#key"
+         x="0"
+         y="0"
+         width="36"
+         height="32"
+         id="use408" />
+      <use
+         xlink:href="#arrow_enter"
+         x="8"
+         y="8"
+         id="use410"
+         style="fill:#404020"
+         width="100%"
+         height="100%" />
+    </symbol>
+    <symbol
+       id="key_win"
+       viewBox="0 0 36 32">
+      <use
+         xlink:href="#key"
+         x="0"
+         y="0"
+         width="36"
+         height="32"
+         id="use413" />
+      <text
+         x="8"
+         y="8"
+         font-size="8px"
+         font-style="italic"
+         dominant-baseline="text-before-edge"
+         id="text415"
+         style="font-style:italic;font-size:8px;font-family:Arial, sans-serif;dominant-baseline:text-before-edge;text-anchor:start;fill:#404020">Win</text>
+      <text
+         x="8"
+         y="17"
+         font-size="8px"
+         font-style="italic"
+         dominant-baseline="text-before-edge"
+         id="text417"
+         style="font-style:italic;font-size:8px;font-family:Arial, sans-serif;dominant-baseline:text-before-edge;text-anchor:start;fill:#404020">Key</text>
+    </symbol>
+    <symbol
+       id="key_volume_up"
+       viewBox="0 0 36 32">
+      <use
+         xlink:href="#key"
+         x="0"
+         y="0"
+         width="36"
+         height="32"
+         id="use420" />
+      <use
+         xlink:href="#volume_up"
+         x="8"
+         y="8"
+         width="13"
+         height="13"
+         id="use422"
+         style="fill:#404020" />
+    </symbol>
+    <symbol
+       id="key_volume_down"
+       viewBox="0 0 36 32">
+      <use
+         xlink:href="#key"
+         x="0"
+         y="0"
+         width="36"
+         height="32"
+         id="use425" />
+      <use
+         xlink:href="#volume_down"
+         x="8"
+         y="8"
+         width="13"
+         height="13"
+         id="use427"
+         style="fill:#404020" />
+    </symbol>
+    <symbol
+       id="key_play_pause"
+       viewBox="0 0 36 32">
+      <use
+         xlink:href="#key"
+         x="0"
+         y="0"
+         width="36"
+         height="32"
+         id="use430" />
+      <use
+         xlink:href="#play_pause"
+         x="8"
+         y="8"
+         width="13"
+         height="13"
+         id="use432"
+         style="fill:#404020" />
+    </symbol>
+    <symbol
+       id="key_stop"
+       viewBox="0 0 36 32">
+      <use
+         xlink:href="#key"
+         x="0"
+         y="0"
+         width="36"
+         height="32"
+         id="use435" />
+      <use
+         xlink:href="#stop"
+         x="8"
+         y="8"
+         width="13"
+         height="13"
+         id="use437"
+         style="fill:#404020" />
+    </symbol>
+    <symbol
+       id="key_previous"
+       viewBox="0 0 36 32">
+      <use
+         xlink:href="#key"
+         x="0"
+         y="0"
+         width="36"
+         height="32"
+         id="use440" />
+      <use
+         xlink:href="#previous"
+         x="8"
+         y="8"
+         width="13"
+         height="13"
+         id="use442"
+         style="fill:#404020" />
+    </symbol>
+    <symbol
+       id="key_next"
+       viewBox="0 0 36 32">
+      <use
+         xlink:href="#key"
+         x="0"
+         y="0"
+         width="36"
+         height="32"
+         id="use445" />
+      <use
+         xlink:href="#next"
+         x="8"
+         y="8"
+         width="13"
+         height="13"
+         id="use447"
+         style="fill:#404020" />
+    </symbol>
+    <symbol
+       id="key_rewind"
+       viewBox="0 0 36 32">
+      <use
+         xlink:href="#key"
+         x="0"
+         y="0"
+         width="36"
+         height="32"
+         id="use450" />
+      <use
+         xlink:href="#rewind"
+         x="8"
+         y="8"
+         width="13"
+         height="13"
+         id="use452"
+         style="fill:#404020" />
+    </symbol>
+    <symbol
+       id="key_forward"
+       viewBox="0 0 36 32">
+      <use
+         xlink:href="#key"
+         x="0"
+         y="0"
+         width="36"
+         height="32"
+         id="use455" />
+      <use
+         xlink:href="#forward"
+         x="8"
+         y="8"
+         width="13"
+         height="13"
+         id="use457"
+         style="fill:#404020" />
+    </symbol>
+    <symbol
+       id="key_esc"
+       viewBox="0 0 36 32">
+      <use
+         xlink:href="#key"
+         x="0"
+         y="0"
+         width="36"
+         height="32"
+         id="use460" />
+      <text
+         x="8"
+         y="8"
+         font-size="8px"
+         font-style="italic"
+         dominant-baseline="text-before-edge"
+         id="text462"
+         style="font-style:italic;font-size:8px;font-family:Arial, sans-serif;dominant-baseline:text-before-edge;text-anchor:start;fill:#404020">Esc</text>
+    </symbol>
+    <symbol
+       id="key_pageup"
+       viewBox="0 0 36 32">
+      <use
+         xlink:href="#key"
+         x="0"
+         y="0"
+         width="36"
+         height="32"
+         id="use465" />
+      <text
+         x="8"
+         y="8"
+         font-size="8px"
+         font-style="italic"
+         dominant-baseline="text-before-edge"
+         id="text467"
+         style="font-style:italic;font-size:8px;font-family:Arial, sans-serif;dominant-baseline:text-before-edge;text-anchor:start;fill:#404020">Page</text>
+      <text
+         x="8"
+         y="17"
+         font-size="8px"
+         font-style="italic"
+         dominant-baseline="text-before-edge"
+         id="text469"
+         style="font-style:italic;font-size:8px;font-family:Arial, sans-serif;dominant-baseline:text-before-edge;text-anchor:start;fill:#404020">Up</text>
+    </symbol>
+    <symbol
+       id="key_pagedown"
+       viewBox="0 0 36 32">
+      <use
+         xlink:href="#key"
+         x="0"
+         y="0"
+         width="36"
+         height="32"
+         id="use472" />
+      <text
+         x="8"
+         y="8"
+         font-size="8px"
+         font-style="italic"
+         dominant-baseline="text-before-edge"
+         id="text474"
+         style="font-style:italic;font-size:8px;font-family:Arial, sans-serif;dominant-baseline:text-before-edge;text-anchor:start;fill:#404020">Page</text>
+      <text
+         x="8"
+         y="17"
+         font-size="8px"
+         font-style="italic"
+         dominant-baseline="text-before-edge"
+         id="text476"
+         style="font-style:italic;font-size:8px;font-family:Arial, sans-serif;dominant-baseline:text-before-edge;text-anchor:start;fill:#404020">Down</text>
+    </symbol>
+    <symbol
+       id="keys_arrows"
+       viewBox="0 0 108 64">
+      <use
+         xlink:href="#key_up"
+         x="36"
+         y="0"
+         width="36"
+         height="32"
+         id="use479" />
+      <use
+         xlink:href="#key_left"
+         x="0"
+         y="32"
+         width="36"
+         height="32"
+         id="use481" />
+      <use
+         xlink:href="#key_down"
+         x="36"
+         y="32"
+         width="36"
+         height="32"
+         id="use483" />
+      <use
+         xlink:href="#key_right"
+         x="72"
+         y="32"
+         width="36"
+         height="32"
+         id="use485" />
+    </symbol>
+    <!-- ** Wii Remote LED indicators. ** -->
+    <radialGradient
+       id="wii_led_light_gradient"
+       cx="0.5"
+       cy="0.5"
+       r="0.5">
+      <stop
+         offset="0"
+         stop-color="#ffffff"
+         stop-opacity="0.75"
+         id="stop488" />
+      <stop
+         offset="1"
+         stop-color="#adcefb"
+         stop-opacity="0"
+         id="stop490" />
+    </radialGradient>
+    <!-- Colors from http://ftpmerou.free.fr/ubuntu/wiimote/wiimote.svg -->
+    <g
+       id="wii_led_off">
+      <rect
+         x="-6"
+         y="-6"
+         width="12"
+         height="12"
+         id="rect493"
+         style="fill:#818588;stroke:#979a9c;stroke-width:1" />
+    </g>
+    <g
+       id="wii_led_on">
+      <rect
+         x="-6"
+         y="-6"
+         width="12"
+         height="12"
+         id="rect496"
+         style="fill:#83cff8;stroke:#59b2e3;stroke-width:1" />
+      <circle
+         cx="0"
+         cy="0"
+         r="9"
+         id="circle498"
+         style="fill:url(#wii_led_light_gradient)" />
+    </g>
+    <symbol
+       id="wii_leds_12"
+       viewBox="0 0 80 20">
+      <use
+         xlink:href="#wii_led_on"
+         x="10"
+         y="10"
+         id="use501"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#wii_led_on"
+         x="30"
+         y="10"
+         id="use503"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#wii_led_off"
+         x="50"
+         y="10"
+         id="use505"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#wii_led_off"
+         x="70"
+         y="10"
+         id="use507"
+         width="100%"
+         height="100%" />
+    </symbol>
+    <symbol
+       id="wii_leds_13"
+       viewBox="0 0 80 20">
+      <use
+         xlink:href="#wii_led_on"
+         x="10"
+         y="10"
+         id="use510"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#wii_led_off"
+         x="30"
+         y="10"
+         id="use512"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#wii_led_on"
+         x="50"
+         y="10"
+         id="use514"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#wii_led_off"
+         x="70"
+         y="10"
+         id="use516"
+         width="100%"
+         height="100%" />
+    </symbol>
+    <symbol
+       id="wii_leds_14"
+       viewBox="0 0 80 20">
+      <use
+         xlink:href="#wii_led_on"
+         x="10"
+         y="10"
+         id="use519"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#wii_led_off"
+         x="30"
+         y="10"
+         id="use521"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#wii_led_off"
+         x="50"
+         y="10"
+         id="use523"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#wii_led_on"
+         x="70"
+         y="10"
+         id="use525"
+         width="100%"
+         height="100%" />
+    </symbol>
+    <symbol
+       id="wii_leds_any"
+       viewBox="0 0 80 80">
+      <use
+         xlink:href="#wii_led_on"
+         x="10"
+         y="10"
+         id="use528"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#wii_led_off"
+         x="30"
+         y="10"
+         id="use530"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#wii_led_off"
+         x="50"
+         y="10"
+         id="use532"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#wii_led_off"
+         x="70"
+         y="10"
+         id="use534"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#wii_led_off"
+         x="10"
+         y="30"
+         id="use536"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#wii_led_on"
+         x="30"
+         y="30"
+         id="use538"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#wii_led_off"
+         x="50"
+         y="30"
+         id="use540"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#wii_led_off"
+         x="70"
+         y="30"
+         id="use542"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#wii_led_off"
+         x="10"
+         y="50"
+         id="use544"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#wii_led_off"
+         x="30"
+         y="50"
+         id="use546"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#wii_led_on"
+         x="50"
+         y="50"
+         id="use548"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#wii_led_off"
+         x="70"
+         y="50"
+         id="use550"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#wii_led_off"
+         x="10"
+         y="70"
+         id="use552"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#wii_led_off"
+         x="30"
+         y="70"
+         id="use554"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#wii_led_off"
+         x="50"
+         y="70"
+         id="use556"
+         width="100%"
+         height="100%" />
+      <use
+         xlink:href="#wii_led_on"
+         x="70"
+         y="70"
+         id="use558"
+         width="100%"
+         height="100%" />
+    </symbol>
+    <symbol
+       id="wii_leds_12_square"
+       viewBox="0 0 1 1">
+      <use
+         xlink:href="#wii_leds_12"
+         x="0"
+         y="0"
+         width="1"
+         height="1"
+         id="use561" />
+    </symbol>
+    <symbol
+       id="wii_leds_13_square"
+       viewBox="0 0 1 1">
+      <use
+         xlink:href="#wii_leds_13"
+         x="0"
+         y="0"
+         width="1"
+         height="1"
+         id="use564" />
+    </symbol>
+    <symbol
+       id="wii_leds_14_square"
+       viewBox="0 0 1 1">
+      <use
+         xlink:href="#wii_leds_14"
+         x="0"
+         y="0"
+         width="1"
+         height="1"
+         id="use567" />
+    </symbol>
+    <symbol
+       id="home_and_down"
+       viewBox="0 0 2 1">
+      <use
+         xlink:href="#button_home"
+         x="0"
+         y="0"
+         width="1"
+         height="1"
+         id="use570" />
+      <use
+         xlink:href="#dpad_down"
+         x="1"
+         y="0"
+         width="1"
+         height="1"
+         id="use572" />
+    </symbol>
+    <symbol
+       id="home_and_left"
+       viewBox="0 0 2 1">
+      <use
+         xlink:href="#button_home"
+         x="0"
+         y="0"
+         width="1"
+         height="1"
+         id="use575" />
+      <use
+         xlink:href="#dpad_left"
+         x="1"
+         y="0"
+         width="1"
+         height="1"
+         id="use577" />
+    </symbol>
+    <symbol
+       id="home_and_up"
+       viewBox="0 0 2 1">
+      <use
+         xlink:href="#button_home"
+         x="0"
+         y="0"
+         width="1"
+         height="1"
+         id="use580" />
+      <use
+         xlink:href="#dpad_up"
+         x="1"
+         y="0"
+         width="1"
+         height="1"
+         id="use582" />
+    </symbol>
+    <symbol
+       id="home_and_right"
+       viewBox="0 0 2 1">
+      <use
+         xlink:href="#button_home"
+         x="0"
+         y="0"
+         width="1"
+         height="1"
+         id="use585" />
+      <use
+         xlink:href="#dpad_right"
+         x="1"
+         y="0"
+         width="1"
+         height="1"
+         id="use587" />
+    </symbol>
+    <!-- ** End of definitions. ** -->
+  </defs>
+  <use
+     xlink:href="#mouse_left"
+     x="25"
+     y="10"
+     width="5"
+     height="5"
+     id="use640"
+     transform="translate(-25.837151,-10.143056)" />
+</svg>

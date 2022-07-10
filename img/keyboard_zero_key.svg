@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg2"
+   viewBox="0 0 259.94001 249.14999"
+   version="1.1"
+   sodipodi:docname="keyboard_zero_key.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
+   width="259.94"
+   height="249.14999">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1136"
+     id="namedview55"
+     showgrid="false"
+     inkscape:zoom="0.49571429"
+     inkscape:cx="-626.36887"
+     inkscape:cy="208.86168"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     inkscape:snap-text-baseline="false" />
+  <title
+     id="title2885">Keyboard Keys</title>
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient3165">
+      <stop
+         id="stop3171"
+         style="stop-color:#d7d7d7"
+         offset="0" />
+      <stop
+         id="stop3173"
+         style="stop-color:#e7e7e7"
+         offset=".5" />
+      <stop
+         id="stop3169"
+         style="stop-color:#d7d7d7"
+         offset="1" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3141">
+      <stop
+         id="stop3143"
+         style="stop-color:#d8d8d8"
+         offset="0" />
+      <stop
+         id="stop3145"
+         style="stop-color:#a3a3a3"
+         offset="1" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient2905"
+       y2="384.29001"
+       xlink:href="#linearGradient3141"
+       gradientUnits="userSpaceOnUse"
+       x2="168.57001"
+       y1="200.42999"
+       x1="168.57001" />
+    <linearGradient
+       id="linearGradient2907"
+       y2="292.35999"
+       xlink:href="#linearGradient3165"
+       gradientUnits="userSpaceOnUse"
+       x2="250.17999"
+       gradientTransform="matrix(0.83174,0,0,0.83684,27.65,44.986)"
+       y1="292.35999"
+       x1="90.589996" />
+    <linearGradient
+       id="linearGradient2905-3-7"
+       y2="384.29001"
+       gradientUnits="userSpaceOnUse"
+       x2="168.57001"
+       y1="200.42999"
+       x1="168.57001">
+      <stop
+         id="stop3143-2-3"
+         style="stop-color:#d8d8d8"
+         offset="0" />
+      <stop
+         id="stop3145-9-5"
+         style="stop-color:#a3a3a3"
+         offset="1" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient2907-6-1"
+       y2="292.35999"
+       gradientUnits="userSpaceOnUse"
+       x2="250.17999"
+       gradientTransform="matrix(0.83174,0,0,0.83684,27.65,44.986)"
+       y1="292.35999"
+       x1="90.589996">
+      <stop
+         id="stop3171-9-8"
+         style="stop-color:#d7d7d7"
+         offset="0" />
+      <stop
+         id="stop3173-3-9"
+         style="stop-color:#e7e7e7"
+         offset=".5" />
+      <stop
+         id="stop3169-5-4"
+         style="stop-color:#d7d7d7"
+         offset="1" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3141"
+       id="linearGradient871"
+       gradientUnits="userSpaceOnUse"
+       x1="168.57001"
+       y1="200.42999"
+       x2="168.57001"
+       y2="384.29001" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3165"
+       id="linearGradient873"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.83174,0,0,0.83684,27.65,44.986)"
+       x1="90.589996"
+       y1="292.35999"
+       x2="250.17999"
+       y2="292.35999" />
+  </defs>
+  <g
+     id="layer1"
+     transform="translate(-33.553,-721.03)">
+    <g
+       id="g4174"
+       transform="translate(-5.0509963,553.245)">
+      <rect
+         id="rect4176"
+         style="fill:url(#linearGradient871);fill-rule:evenodd;stroke:#8d8d8d;stroke-width:1px"
+         ry="21.429001"
+         height="182.86"
+         width="194.28999"
+         y="200.92999"
+         x="71.429001" />
+      <rect
+         id="rect4178"
+         style="fill:url(#linearGradient873);fill-rule:evenodd;stroke:#f8f8f8;stroke-width:0.83429003px"
+         ry="17.931999"
+         height="153.02"
+         width="161.59"
+         y="213.14"
+         x="87.059998" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64px;line-height:125%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#515151;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="111.17924"
+       y="890.60284"
+       id="text868"><tspan
+         sodipodi:role="line"
+         id="tspan41"
+         x="111.17924"
+         y="890.60284">0</tspan></text>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot923"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"><flowRegion
+         id="flowRegion925"><rect
+           id="rect927"
+           width="358.07584"
+           height="351.49289"
+           x="444.806"
+           y="215.50998" /></flowRegion><flowPara
+         id="flowPara929" /></flowRoot>    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64px;line-height:125%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#a0a0a0;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
+       x="104.71049"
+       y="817.97253"
+       id="text868-9"
+       inkscape:transform-center-x="-397.40635"
+       inkscape:transform-center-y="22.190202"><tspan
+         sodipodi:role="line"
+         id="tspan61"
+         x="104.71049"
+         y="817.97253">=</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64px;line-height:125%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#a0a0a0;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="184.679"
+       y="886.39972"
+       id="text868-1"><tspan
+         sodipodi:role="line"
+         id="tspan41-7"
+         x="184.679"
+         y="886.39972">}</tspan></text>
+  </g>
+  <metadata
+     id="metadata52">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:title>Keyboard Keys</dc:title>
+        <dc:date>2009-09-25T00:06:12</dc:date>
+        <dc:description>I drew these keys to mimic real keyboard keys. They closely resemble the Apple keyboard key style.</dc:description>
+        <dc:source>https://openclipart.org/detail/27549/keyboard-keys-by-simanek</dc:source>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Simanek</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>computer</rdf:li>
+            <rdf:li>keyboard</rdf:li>
+            <rdf:li>realistic</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>

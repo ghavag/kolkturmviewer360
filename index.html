@@ -12,10 +12,91 @@
         margin: 0px;
         padding: 0px;
       }
+
+      .overlay_button {
+        position: absolute;
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+        text-align: center;
+        line-height: 30px;
+        width: 30px;
+        height: 30px;
+        border-radius: 15px;
+        cursor: pointer;
+      }
+
+      .overlay_dialoge {
+        display: none;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        margin: auto;
+        position: absolute;
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+        border-radius: 10px;
+        padding: 10px;
+        box-shadow: 6px 5px 9px -9px black;
+      }
+
+      .overlay_dialoge h1 {
+        margin: 0;
+        font-size: 25px;
+      }
+
+      .overlay_dialoge a {
+        color: white;
+      }
+
+      .close_button {
+        position: absolute;
+        top: 8px;
+        right: 10px;
+        cursor: pointer;
+        font-family: "Sans-serif"
+      }
     </style>
   </head>
   <body onload="initKolkViewer('kolkturm.json')">
     <div id="kolkturmviewer">
+      <div class="overlay_button" style="left: 20px; top: 20px" onclick="$('#overlay_help').show(400)">?</div>
+
+      <div class="overlay_dialoge" id="overlay_help">
+        <div class="close_button" onclick="$('#overlay_help').hide(400)">x</div>
+        <h1>Kolkturm Viewer 360</h1>
+        <p>Der <a target="_blank" href="https://de.wikipedia.org/wiki/Kolkturm">Kolkturm</a> ist ein Aussichtspunkt in Halle an der Saale. Der Kolkturm Viewer 360 erlaubt einen virtuellen Rundumblick. Objekte in der Ferne werden erklärt, wenn man mit dem Mauspfeil darüber fährt.</p>
+        <p>Hinweise zur Bedienung:</p>
+        <table>
+          <tr>
+            <td><img src="./img/keyboard_arrow_keys.svg" style="width: 100px">, </td>
+            <td style="min-width:100px"><img src="./img/mouse_left_button.svg" style="width: 60px; vertical-align:middle;"><div style="display: inline-block; vertical-align: middle"> + </div><img src="./img/mouse_arrow.svg" style="width: 20px; vertical-align:middle;"></td>
+            <td>Navigieren im Bild über Pfeiltasten oder durch bewegen der Maus bei gedrückter linker Maustaste.</td>
+          </tr>
+          <tr>
+            <td><img src="./img/keyboard_plus_minus_keys.svg" style="width: 68px">, </td>
+            <td><img src="./img/mouse_wheel.svg" style="width: 60px"></td>
+            <td>Im Bild zoomen über Plus-, Minustaste oder Mausrad.</td>
+          </tr>
+          <tr>
+            <td><img src="./img/keyboard_zero_key.svg" style="width: 37px"></td>
+            <td></td>
+            <td>Zoomstufe mit der 0-Taste zurücksetzen.</td>
+          </tr>
+          <tr>
+            <td><img src="./img/keyboard_nosw_keys.svg" style="width: 130px"></td>
+            <td></td>
+            <td>Himmelsrichtung automatisch nach Norden, Osten, Süden oder Westen ausrichten über N-, O-, S- bzw. W-Taste.</td>
+          </tr>
+          <tr>
+            <td><img src="./img/keyboard_esc_key.svg" style="width: 37px"></td>
+            <td></td>
+            <td>Laufende Animation über Esc-Taste abbrechen.</td>
+          </tr>
+        </table>
+        <button style="display: block; margin-top: 50px; margin-left: auto; margin-right: auto;" onclick="$('#overlay_help').hide(400)">Verstanden!</button>
+      </div>
     </div>
   </body>
 </html>
