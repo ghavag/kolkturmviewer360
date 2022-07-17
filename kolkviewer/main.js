@@ -104,12 +104,14 @@ function initKolkViewer(data_url) {
     $(document).keydown(keyHandler);
     $(canvas).mousewheel(mouseWheelHandler);
     $(canvas).mousedown(mouseDownHandler);
+    $(canvas).mousemove(mouseHoverObjectHandler);
     $(document).mouseup(mouseUpHandler); // Mouse up event must be bound to the document
     $(document).mousemove(mouseMoveHandler); // See comment above
 }
 
 /**
- * Event handler for mouse move events called by the browser
+ * Event handler for mouse move events regarding the whole document called by the
+ * browser
  * @param {object} event - Object with information about the mouse move event
  */
 function mouseMoveHandler(event) {
@@ -125,8 +127,43 @@ function mouseMoveHandler(event) {
         mousex = event.pageX;
         mousey = event.pageY;
         animation_running = false;
-    } else {
-        mouseHoverObjectHandler(event.pageX, event.pageY)
+    }
+}
+
+/**
+ * Event handler for mouse move events regarding the canvas element called by the
+ * browser. Checks whether a given (mouse) position hovers an object and reacts to
+ * that by either show the object info div or hiding it.
+ * @param {object} event - Object with information about the mouse move event
+ */
+ function mouseHoverObjectHandler(event) {
+    if (mouseclicked)  {
+        hideObjectInformation();
+        return;
+    }
+
+    var ix = event.pageX*(ih*posz/vh) + posx;
+    var iy = event.pageY*(ih*posz/vh) + posy;
+    var hovered_object = null;
+
+    objects.forEach(function(o) {
+        o.areas.forEach(function(a) {
+            if ((ix >= a.x && ix <= (a.x + a.width)) && (iy >= a.y && iy <= (a.y + a.height))) {
+                hovered_object = o;
+            }
+        });
+    });
+
+    if (hovered_object != last_hovered_object) {
+        if (draw_object_areas_on_mouseover) draw(); // Re-draw the current frame to erase the areas of the last hovered object
+
+        if (hovered_object == null) {
+            hideObjectInformation();
+        } else {
+            showObjectInformation(hovered_object);
+            if (draw_object_areas_on_mouseover) drawObjectAreas(null, hovered_object);
+        }
+        last_hovered_object = hovered_object;
     }
 }
 
@@ -383,38 +420,6 @@ function prepareObjectArray(json_data) {
     });
 
     return json_data;
-}
-
-/**
- * Check whether a given (mouse) position hovers an object and reacts to that by
- * either show the object info div or hiding it.
- * @param {number} vx - X position (of the mouse pointer) in view space
- * @param {number} vy - Y position (of the mouse pointer) in view space
- */
-function mouseHoverObjectHandler(vx, vy) {
-    var ix = vx*(ih*posz/vh) + posx;
-    var iy = vy*(ih*posz/vh) + posy;
-    var hovered_object = null;
-
-    objects.forEach(function(o) {
-        o.areas.forEach(function(a) {
-            if ((ix >= a.x && ix <= (a.x + a.width)) && (iy >= a.y && iy <= (a.y + a.height))) {
-                hovered_object = o;
-            }
-        });
-    });
-
-    if (hovered_object != last_hovered_object) {
-        if (draw_object_areas_on_mouseover) draw(); // Re-draw the current frame to erase the areas of the last hovered object
-
-        if (hovered_object == null) {
-            hideObjectInformation();
-        } else {
-            showObjectInformation(hovered_object);
-            if (draw_object_areas_on_mouseover) drawObjectAreas(null, hovered_object);
-        }
-        last_hovered_object = hovered_object;
-    }
 }
 
 /**
