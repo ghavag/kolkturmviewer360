@@ -18,6 +18,10 @@
           $("#dialog_container").css("display", "none");
         });
       }
+
+      $(document).ready(function() {
+        kolkturm_viewer = new KolkturmViewer('kolkturm.json');
+      });
     </script>
     <style>
       body, html {
@@ -76,7 +80,7 @@
       }
     </style>
   </head>
-  <body onload="initKolkViewer('kolkturm.json')">
+  <body>
     <div id="kolkturmviewer">
       <div class="overlay_button" style="left: 20px; top: 20px" onclick="showDialog('overlay_help')">?</div>
 
