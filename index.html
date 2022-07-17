@@ -7,10 +7,33 @@
     <script type="text/javascript" src="jquery/jquery.mousewheel.min.js"></script>
     <script type="text/javascript" src="kolkviewer/main.js"></script>
     <link rel="stylesheet" href="kolkviewer/kolkturmviewer.css">
+    <script type="text/javascript">
+      function showDialog(dialog_id) {
+        $("#dialog_container").css("display", "flex");
+        $("#" + dialog_id).show(400);
+      }
+
+      function hideDialog(dialog_id) {
+        $("#" + dialog_id).hide(400, function() {
+          $("#dialog_container").css("display", "none");
+        });
+      }
+    </script>
     <style>
       body, html {
         margin: 0px;
         padding: 0px;
+      }
+
+      #dialog_container {
+        display: none;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.5);
+        border: 0;
+        position: absolute;
+        width: 100%;
+        height: 100%;
       }
 
       .overlay_button {
@@ -25,14 +48,8 @@
         cursor: pointer;
       }
 
-      .overlay_dialoge {
+      .overlay_dialog {
         display: none;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        -webkit-transform: translate(-50%, -50%);
-        -ms-transform: translate(-50%, -50%);
-        margin: auto;
         position: absolute;
         background-color: rgba(0, 0, 0, 0.8);
         color: white;
@@ -41,12 +58,12 @@
         box-shadow: 6px 5px 9px -9px black;
       }
 
-      .overlay_dialoge h1 {
+      .overlay_dialog h1 {
         margin: 0;
         font-size: 25px;
       }
 
-      .overlay_dialoge a {
+      .overlay_dialog a {
         color: white;
       }
 
@@ -61,41 +78,44 @@
   </head>
   <body onload="initKolkViewer('kolkturm.json')">
     <div id="kolkturmviewer">
-      <div class="overlay_button" style="left: 20px; top: 20px" onclick="$('#overlay_help').show(400)">?</div>
+      <div class="overlay_button" style="left: 20px; top: 20px" onclick="showDialog('overlay_help')">?</div>
 
-      <div class="overlay_dialoge" id="overlay_help">
-        <div class="close_button" onclick="$('#overlay_help').hide(400)">x</div>
-        <h1>Kolkturm Viewer 360</h1>
-        <p>Der <a target="_blank" href="https://de.wikipedia.org/wiki/Kolkturm">Kolkturm</a> ist ein Aussichtspunkt in Halle an der Saale. Der Kolkturm Viewer 360 erlaubt einen virtuellen Rundumblick. Objekte in der Ferne werden erklärt, wenn man mit dem Mauspfeil darüber fährt.</p>
-        <p>Hinweise zur Bedienung:</p>
-        <table>
-          <tr>
-            <td><img src="./img/keyboard_arrow_keys.svg" style="width: 100px">, </td>
-            <td style="min-width:100px"><img src="./img/mouse_left_button.svg" style="width: 60px; vertical-align:middle;"><div style="display: inline-block; vertical-align: middle"> + </div><img src="./img/mouse_arrow.svg" style="width: 20px; vertical-align:middle;"></td>
-            <td>Navigieren im Bild über Pfeiltasten oder durch bewegen der Maus bei gedrückter linker Maustaste.</td>
-          </tr>
-          <tr>
-            <td><img src="./img/keyboard_plus_minus_keys.svg" style="width: 68px">, </td>
-            <td><img src="./img/mouse_wheel.svg" style="width: 60px"></td>
-            <td>Im Bild zoomen über Plus-, Minustaste oder Mausrad.</td>
-          </tr>
-          <tr>
-            <td><img src="./img/keyboard_zero_key.svg" style="width: 37px"></td>
-            <td></td>
-            <td>Zoomstufe mit der 0-Taste zurücksetzen.</td>
-          </tr>
-          <tr>
-            <td><img src="./img/keyboard_nosw_keys.svg" style="width: 130px"></td>
-            <td></td>
-            <td>Himmelsrichtung automatisch nach Norden, Osten, Süden oder Westen ausrichten über N-, O-, S- bzw. W-Taste.</td>
-          </tr>
-          <tr>
-            <td><img src="./img/keyboard_esc_key.svg" style="width: 37px"></td>
-            <td></td>
-            <td>Laufende Animation über Esc-Taste abbrechen.</td>
-          </tr>
-        </table>
-        <button style="display: block; margin-top: 50px; margin-left: auto; margin-right: auto;" onclick="$('#overlay_help').hide(400)">Verstanden!</button>
+      <div id="dialog_container">
+        <!-- Help dialog -->
+        <div class="overlay_dialog" style="max-width: 900px;" id="overlay_help">
+          <div class="close_button" onclick="hideDialog('overlay_help')">x</div>
+          <h1>Kolkturm Viewer 360</h1>
+          <p>Der <a target="_blank" href="https://de.wikipedia.org/wiki/Kolkturm">Kolkturm</a> ist ein Aussichtspunkt in Halle an der Saale. Der Kolkturm Viewer 360 erlaubt einen virtuellen Rundumblick. Objekte in der Ferne werden erklärt, wenn man mit dem Mauspfeil darüber fährt.</p>
+          <p>Hinweise zur Bedienung:</p>
+          <table>
+            <tr>
+              <td><img src="./img/keyboard_arrow_keys.svg" style="width: 100px">, </td>
+              <td style="min-width:100px"><img src="./img/mouse_left_button.svg" style="width: 60px; vertical-align:middle;"><div style="display: inline-block; vertical-align: middle"> + </div><img src="./img/mouse_arrow.svg" style="width: 20px; vertical-align:middle;"></td>
+              <td>Navigieren im Bild über Pfeiltasten oder durch bewegen der Maus bei gedrückter linker Maustaste.</td>
+            </tr>
+            <tr>
+              <td><img src="./img/keyboard_plus_minus_keys.svg" style="width: 68px">, </td>
+              <td><img src="./img/mouse_wheel.svg" style="width: 60px"></td>
+              <td>Im Bild zoomen über Plus-, Minustaste oder Mausrad.</td>
+            </tr>
+            <tr>
+              <td><img src="./img/keyboard_zero_key.svg" style="width: 37px"></td>
+              <td></td>
+              <td>Zoomstufe mit der 0-Taste zurücksetzen.</td>
+            </tr>
+            <tr>
+              <td><img src="./img/keyboard_nosw_keys.svg" style="width: 130px"></td>
+              <td></td>
+              <td>Himmelsrichtung automatisch nach Norden, Osten, Süden oder Westen ausrichten über N-, O-, S- bzw. W-Taste.</td>
+            </tr>
+            <tr>
+              <td><img src="./img/keyboard_esc_key.svg" style="width: 37px"></td>
+              <td></td>
+              <td>Laufende Animation über Esc-Taste abbrechen.</td>
+            </tr>
+          </table>
+          <button style="display: block; margin-top: 50px; margin-left: auto; margin-right: auto;" onclick="hideDialog('overlay_help')">Verstanden!</button>
+        </div>
       </div>
     </div>
   </body>
