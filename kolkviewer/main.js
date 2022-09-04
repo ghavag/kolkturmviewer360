@@ -81,10 +81,9 @@ class KolkturmViewer {
         this.pano.onload = (() => {
             this.iw = this.pano.width;
             this.ih = this.pano.height;
-            this.minz = this.vh / this.ih;
             this.movex(-(this.vw/2*this.ih*this.posz/this.vh-this.nx_pos)); // That takes the north direction into the view center
             this.animation_running = false; // Stop loading animation
-            this.draw();
+            this.resizeHandler();
         });
 
         // All required information is stored in a json file,
@@ -99,6 +98,8 @@ class KolkturmViewer {
             this.objects = this.prepareObjectArray(json_request.response['objects']);
         });
 
+        // Even thought those properties will also be set by the resizeHandler() it is necessary to set
+        // this here (before the image has loaded) in order to display the load animation correctly.
         this.canvas.width = this.vw;
         this.canvas.height = this.vh;
 
@@ -114,6 +115,40 @@ class KolkturmViewer {
         $(this.canvas).mousemove(this.mouseHoverObjectHandler.bind(this));
         $(document).mouseup(this.mouseUpHandler.bind(this)); // Mouse up event must be bound to the document
         $(document).mousemove(this.mouseMoveHandler.bind(this)); // See comment above
+        $(window).resize(this.resizeHandler.bind(this));
+    }
+
+    /**
+     * Event handler to react on browser window resize event called by the browser
+     */
+    resizeHandler() {
+        $(this.wrapper).css({'max-width': this.iw+"px"});
+        this.vw = $(this.wrapper).width();
+
+        $(this.wrapper).css({'min-height': Math.ceil((this.vw*this.ih)/this.iw)+"px"});
+        $(this.wrapper).css({'max-height': this.ih+"px"});
+        this.vh = $(this.wrapper).height();
+
+        var newvr = this.vw/this.vh;
+        var deltavr = this.vr - newvr;
+        this.vr = newvr;
+
+        this.minz = this.vh / this.ih;
+
+        this.canvas.width = this.vw;
+        this.canvas.height = this.vh;
+
+        // Correct x position such that the middle of the current
+        // clipping area stays in the middle of the view area.
+        this.movex((deltavr*this.ih*this.posz)/2);
+
+        // posz needs correction if it got out of range. Also posx needs correction then.
+        if (this.posz < this.minz) {
+            this.movex((this.vr*this.ih*(this.posz - this.minz))/2);
+            this.posz = this.minz;
+        }
+
+        this.draw();
     }
 
     /**
@@ -235,7 +270,7 @@ class KolkturmViewer {
                 break;
             case 107: // Plus
             case 171:
-                this.zoom(-0.01, 0.5, 0,5);
+                this.zoom(-0.01, 0.5, 0.5);
                 this.draw();
                 break;
             case 109: // Minus
