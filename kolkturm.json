@@ -6,33 +6,20 @@
             "name": "Windpark bei Merbitz, Domnitz und Neutz",
             "location": "51\u00b037'04.5\"N 11\u00b050'37.8\"E",
             "distance": "13,7 Km",
-            "areas": [
-                {
-                    "x": 2099,
-                    "y": 913,
-                    "height": 21,
-                    "width": 99
-                }
-            ]
-        },
-        {
-            "name": "Windpark bei Merbitz, Domnitz und Neutz",
-            "location": "51\u00b037'04.5\"N 11\u00b050'37.8\"E",
-            "distance": "13,7 Km",
+            "one_marker_per_area": true,
             "areas": [
                 {
                     "x": 1895,
                     "y": 908,
                     "height": 24,
                     "width": 170
-                }
-            ]
-        },
-        {
-            "name": "Windpark bei Merbitz, Domnitz und Neutz",
-            "location": "51\u00b037'04.5\"N 11\u00b050'37.8\"E",
-            "distance": "13,7 Km",
-            "areas": [
+                },
+                {
+                    "x": 2099,
+                    "y": 913,
+                    "height": 21,
+                    "width": 99
+                },
                 {
                     "x": 2248,
                     "y": 914,

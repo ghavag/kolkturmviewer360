@@ -187,11 +187,18 @@ class KolkturmViewer {
         var ix = event.pageX*(this.ih*this.posz/this.vh) + this.posx;
         var iy = event.pageY*(this.ih*this.posz/this.vh) + this.posy;
         var hovered_object = null;
+        var hovered_area_index = null;
 
         this.objects.forEach(function(o) {
-            o.areas.forEach(function(a) {
+            o.areas.forEach(function(a, i) {
                 if ((ix >= a.x && ix <= (a.x + a.width)) && (iy >= a.y && iy <= (a.y + a.height))) {
                     hovered_object = o;
+
+                    if (o.one_marker_per_area) {
+                        hovered_area_index = i;
+                        o.pointer_x = a.x + a.width/2;
+                        o.pointer_y= a.y;
+                    }
                 }
             });
         });
@@ -202,8 +209,8 @@ class KolkturmViewer {
             if (hovered_object == null) {
                 this.hideObjectInformation();
             } else {
-                this.showObjectInformation(hovered_object);
-                if (this.draw_object_areas_on_mouseover) this.drawObjectAreas(hovered_object);
+                this.showObjectInformation(hovered_object, hovered_area_index);
+                if (this.draw_object_areas_on_mouseover) this.drawObjectAreas(hovered_object, hovered_area_index);
             }
             this.last_hovered_object = hovered_object;
         }
@@ -468,11 +475,18 @@ class KolkturmViewer {
     /**
      * Fills the object info div with information of the given object and displays the div.
      * @param {object} obj - JavaScript object that holds the information of the object whose information is to be displayed
+     * @param {number} hoai - If one_marker_per_area is true for the object, hoai is the index of the object area hovered.
      */
-    showObjectInformation(obj) {
+    showObjectInformation(obj, hoai=null) {
         var html = "<table>";
 
-        html += "<tr><th colspan=\"2\">" + obj.name + "</th><tr>";
+        html += "<tr><th colspan=\"2\">" + obj.name;
+
+        if (obj.one_marker_per_area) {
+            html += " (" + (hoai + 1) + "/" + obj.areas.length + ")";
+        }
+
+        html += "</th><tr>";
 
         if (obj.add_name) {
             html += "<tr><td colspan=\"2\" class=\"add_name\">" + obj.add_name + "</td><tr>";
@@ -609,12 +623,18 @@ class KolkturmViewer {
     /**
      * Draw all areas of an object as red rectangles
      * @param {object} obj - JavaScript object with holds the object whose areas are to be drawn
+     * @param {number} hoai - hoai is the index of the object area rectangle to be drawn. If null all area rectangles of the object are drawn.
      */
-    drawObjectAreas(obj) {
+    drawObjectAreas(obj, hoai=null) {
         this.ctx2d.strokeStyle = 'red';
 
-        obj.areas.forEach(function(a) {
-            this.ctx2d.strokeRect((a.x-this.posx)/(this.ih*this.posz/this.vh), (a.y-this.posy)/(this.ih*this.posz/this.vh), a.width/(this.ih*this.posz/this.vh), a.height/(this.ih*this.posz/this.vh));
+        obj.areas.forEach(function(a, i) {
+            if (hoai === null || hoai === i) {
+                this.ctx2d.strokeRect(
+                    (a.x-this.posx)/(this.ih*this.posz/this.vh), (a.y-this.posy)/(this.ih*this.posz/this.vh),
+                    a.width/(this.ih*this.posz/this.vh), a.height/(this.ih*this.posz/this.vh)
+                );
+            }
         }.bind(this));
     }
 
