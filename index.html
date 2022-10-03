@@ -5,22 +5,193 @@
     <title>Kolkturm Viewer 360</title>
     <script type="text/javascript" src="jquery/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="jquery/jquery.mousewheel.min.js"></script>
+    <script type="text/javascript" src="jquery/jquery-ui.min.js"></script>
     <script type="text/javascript" src="kolkviewer/main.js"></script>
     <link rel="stylesheet" href="kolkviewer/kolkturmviewer.css">
+    <link rel="stylesheet" href="jquery/jquery-ui.min.css">
     <script type="text/javascript">
       function showDialog(dialog_id) {
+        kolkturm_viewer.ignore_key_events = true;
         $("#dialog_container").css("display", "flex");
         $("#" + dialog_id).show(400);
       }
 
       function hideDialog(dialog_id) {
+        kolkturm_viewer.ignore_key_events = false;
         $("#" + dialog_id).hide(400, function() {
           $("#dialog_container").css("display", "none");
         });
       }
 
       $(document).ready(function() {
+        var objects = [];
+
         kolkturm_viewer = new KolkturmViewer('kolkturm.json');
+
+        kolkturm_viewer.ready_function = function() {
+          kolkturm_viewer.objects.forEach(function(o, i) {
+            if (o.one_marker_per_area) {
+              o.areas.forEach(function(a, l) {
+                $('#combobox').append('<option value="' + i + '-' + l + '">' + o.name + ' (' + (l+1) + '/' + o.areas.length + ')</option>');
+                objects.push({
+                  value: i + '.' + l,
+                  label: o.name + ' (' + (l+1) + '/' + o.areas.length + ')',
+                  desc: o.add_name
+                });
+              });
+            } else {
+              $('#combobox').append('<option value="' + i + '">' + o.name + '</option>');
+              objects.push({
+                value: String(i),
+                label: o.name,
+                desc: o.add_name
+              });
+            }
+          });
+        }
+
+        $.widget( "custom.combobox", {
+          _create: function() {
+            this.wrapper = $( "<span>" )
+              .addClass( "custom-combobox" )
+              .insertAfter( this.element );
+
+            this.element.hide();
+            this._createAutocomplete();
+            this._createShowAllButton();
+          },
+
+          _createAutocomplete: function() {
+            var selected = this.element.children( ":selected" ),
+              value = selected.val() ? selected.text() : "";
+
+            this.input = $( "<input>" )
+              .appendTo( this.wrapper )
+              .val( value )
+              .attr( "title", "" )
+              .addClass( "custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left" )
+              .autocomplete({
+                delay: 0,
+                minLength: 0,
+                source: objects
+              })
+              .tooltip({
+                classes: {
+                  "ui-tooltip": "ui-state-highlight"
+                }
+              });
+
+              this.input.autocomplete( "instance" )._renderItem = function( ul, item ) {
+                var item_code = "<div>" + item.label;
+
+                if (item.desc) {
+                  item_code = item_code + "<br><span class=\"search_bar_item_desc\">" + item.desc + "</span>";
+                }
+
+                item_code = item_code + "</div>";
+
+                return $( "<li>" )
+                  .append( item_code )
+                  .appendTo( ul );
+              };
+
+            this._on( this.input, {
+              autocompleteselect: function( event, ui ) {
+                const selection = ui.item.value.split(".", 2);
+                var obj_id = selection[0];
+                var obj_area_id = null;
+
+                hideDialog('overlay_search_bar');
+
+                if (selection.length > 1) {
+                  obj_area_id = selection[1];
+                }
+
+                kolkturm_viewer.showObject(obj_id, obj_area_id);
+              },
+
+              autocompletechange: "_removeIfInvalid"
+            });
+          },
+
+          _createShowAllButton: function() {
+            var input = this.input,
+              wasOpen = false;
+
+            $( "<a>" )
+              .attr( "tabIndex", -1 )
+              .attr( "title", "Alle anzeigen" )
+              .tooltip()
+              .appendTo( this.wrapper )
+              .button({
+                icons: {
+                  primary: "ui-icon-triangle-1-s"
+                },
+                text: false
+              })
+              .removeClass( "ui-corner-all" )
+              .addClass( "custom-combobox-toggle ui-corner-right" )
+              .on( "mousedown", function() {
+                wasOpen = input.autocomplete( "widget" ).is( ":visible" );
+              })
+              .on( "click", function() {
+                input.trigger( "focus" );
+
+                // Close if already visible
+                if ( wasOpen ) {
+                  return;
+                }
+
+                // Pass empty string as value to search for, displaying all results
+                input.autocomplete( "search", "" );
+              });
+          },
+
+          _removeIfInvalid: function( event, ui ) {
+
+            // Selected an item, nothing to do
+            if ( ui.item ) {
+              return;
+            }
+
+            // Search for a match (case-insensitive)
+            var value = this.input.val(),
+              valueLowerCase = value.toLowerCase(),
+              valid = false;
+            this.element.children( "option" ).each(function() {
+              if ( $( this ).text().toLowerCase() === valueLowerCase ) {
+                this.selected = valid = true;
+                return false;
+              }
+            });
+
+            // Found a match, nothing to do
+            if ( valid ) {
+              return;
+            }
+
+            // Remove invalid value
+            this.input
+              .val( "" )
+              .attr( "title", value + " didn't match any item" )
+              .tooltip( "open" );
+            this.element.val( "" );
+            this._delay(function() {
+              this.input.tooltip( "close" ).attr( "title", "" );
+            }, 2500 );
+            this.input.autocomplete( "instance" ).term = "";
+          },
+
+          _destroy: function() {
+            this.wrapper.remove();
+            this.element.show();
+          }
+        });
+
+        $( "#combobox" ).combobox();
+        $( "#toggle" ).on( "click", function() {
+          $( "#combobox" ).toggle();
+        });
       });
     </script>
     <style>
@@ -78,13 +249,58 @@
         cursor: pointer;
         font-family: "Sans-serif"
       }
+
+      .custom-combobox {
+        position: relative;
+        display: inline-block;
+      }
+
+      .custom-combobox-toggle {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        margin-left: -1px;
+        padding: 0;
+      }
+
+      .custom-combobox-input {
+        margin: 0;
+        padding: 5px 10px;
+        width: 400px;
+      }
+
+      .ui-autocomplete {
+        max-height: 400px;
+        overflow-y: auto;
+        /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+      }
+
+      /* IE 6 doesn't support max-height
+      * we use height instead, but this forces the menu to always be this tall
+      */
+      * html .ui-autocomplete {
+        height: 400px;
+      }
+
+      .search_bar_item_desc {
+        font-size: 75%;
+      }
     </style>
   </head>
   <body>
     <div id="kolkturmviewer">
       <div class="overlay_button" style="left: 20px; top: 20px" onclick="showDialog('overlay_help')">?</div>
+      <div class="overlay_button" style="left: 20px; top: 60px" onclick="showDialog('overlay_search_bar'); $('#overlay_search_bar').find('input.custom-combobox-input').focus().val('')">&#x1F50D;</div>
 
       <div id="dialog_container">
+        <!-- Object search bar -->
+        <div class="overlay_dialog" style="top: 20px; width: 454px;" id="overlay_search_bar">
+          <div class="close_button" onclick="hideDialog('overlay_search_bar')">x</div>
+          <label style="display: block; padding-bottom: 5px">Welches Objekt möchten Sie gezeigt bekommen?</label>
+          <select id="combobox"></select>
+        </div>
+
         <!-- Help dialog -->
         <div class="overlay_dialog" style="max-width: 900px;" id="overlay_help">
           <div class="close_button" onclick="hideDialog('overlay_help')">x</div>

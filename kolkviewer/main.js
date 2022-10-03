@@ -38,6 +38,8 @@ class KolkturmViewer {
     mousex = null;
     mousey = null;
     mouseclicked = false;
+    ready_function = null; // Optional function to be called after all data has been loaded
+    ignore_key_events = false; // If set to true key down events will be ignored
 
     /**
      * Indicates that an animation is in progress. Running animations MUST
@@ -84,6 +86,7 @@ class KolkturmViewer {
             this.movex(-(this.vw/2*this.ih*this.posz/this.vh-this.nx_pos)); // That takes the north direction into the view center
             this.animation_running = false; // Stop loading animation
             this.resizeHandler();
+            if (this.ready_function) this.ready_function();
         });
 
         // All required information is stored in a json file,
@@ -249,7 +252,8 @@ class KolkturmViewer {
      * @param {object} event - Object with information about the key
      */
     keyHandler(event) {
-        console.log("event.which: " + event.which + " event.keyCode: " + event.keyCode);
+        if (this.ignore_key_events) return;
+
         switch (event.which) {
             case 27: // Escape
                 this.animation_running = false; // Cancel all running animations
@@ -516,6 +520,16 @@ class KolkturmViewer {
      */
     hideObjectInformation() {
         this.objinfo_div.hide();
+    }
+
+    /**
+     * Performs a animated move to the given object or area of a given object and displays the object information.
+     * @param {number} obj_id - Index of the object in this.objects array
+     * @param {number} area_id - Optional: Index of the area within the selected element of this.objects
+     */
+    showObject(obj_id, area_id) {
+        // TODO: Write code
+        console.log("Showing object " + this.objects[obj_id].name);
     }
 
     /**
