@@ -51,7 +51,7 @@ class KolkturmViewer {
     objects = [];
     last_hovered_object = null;
     objinfo_div = null;
-    draw_all_object_areas = false;
+    draw_all_object_areas = true;
     draw_object_areas_on_mouseover = false;
 
     /**
@@ -362,84 +362,155 @@ class KolkturmViewer {
      * @param {character} cpos - A character out of [nNeEoOsSwW], e.g. 'n' for north
      */
     moveToCompassPosition(cpos) {
-        const north_pos = this.nx_pos-this.vw/2*this.ih*this.posz/this.vh;
         var tpos = 0; // Target position
-        var movdir = 1;
-        var dist;
 
         switch (cpos) {
             case 'n', 'N':
-                tpos = north_pos;
+                tpos = this.nx_pos;
                 break;
             case 'e', 'E', 'o', 'O':
-                tpos = north_pos + this.iw/4;
+                tpos = this.nx_pos + this.iw/4;
                 break;
             case 's', 'S':
-                tpos = north_pos + this.iw/4*2;
+                tpos = this.nx_pos + this.iw/4*2;
                 break;
             case 'w', 'W':
-                tpos = north_pos + this.iw/4*3;
+                tpos = this.nx_pos + this.iw/4*3;
                 break;
             default:
                 return;
         }
 
-        if (tpos > this.posx) { // Target position is to the right from current position
-            dist = tpos - this.posx;
-
-            // Distance is shorter if moving the the left
-            if (dist > (this.posx + this.iw - tpos)) {
-                dist = this.posx + this.iw - tpos;
-                movdir = -1;
-            }
-        } else {
-            dist = this.posx - tpos;
-            movdir = -1;
-
-            // Distance is shorter if moving to the right
-            if (dist > (tpos + this.iw - this.posx)) {
-                dist = tpos + this.iw - this.posx;
-                movdir = 1;
-            }
-        }
-
         this.animation_running = true;
-        this.animatedMoveToXPos(dist, movdir);
+        this.animatedCenterMove(tpos);
     }
 
     /**
-     * Performs an animated move on the x axis over a given distance and moving
-     * direction. The speed of the movement increases first and when decreases
-     * until the movement for the given distance is finally complete. Before
-     * that function is called the global variable animation_running MUST be set
-     * to true.
-     * @param {number} number - Distance to be covered, must be positive
-     * @param {number} movdir - Moving direction. Either to the right (movdir == 1, e.g. from north to east)
-     *                          or to the left (movdir == -1, e.g. from north to west)
-     * @param {number} cov - Covered distance so far. NOT meant to be set by the user
-     * @param {number} speed - Current speed of movement. NOT meant to be set by the user
-     * @param {number} acc - Indicates whether the speed is increasing (1) or decreasing (-1). NOT meant to be set by the user
+     * Performs an animated move to a target position at a given X and/or Y position.
+     * The target position will be at the center of the view. For the Y target position
+     * though, this will not always be possible. This function will respect the upper and
+     * lower borders at the Y axis. The speed of the movement increases first and when
+     * decreases until the target position has been reached. Before this function is
+     * called the global variable animation_running MUST be set to true.
+     * @param {number} xpos - Target position on the X axis in image space or null. If
+     *                          null is passed no movement takes place on the X axis
+     * @param {number} ypos - Target position on the Y axis in image space or null. If
+     *                          null is passed no movement takes place on the Y axis
      */
-    animatedMoveToXPos(dist, movdir=0, cov=0, speed=0, acc=1) {
-        if (!(movdir == 1 || movdir == -1)) {
-            throw new Error("Parameter movdir must be either 1 or -1");
+    animatedCenterMove(xpos=null, ypos=null) {
+        /*
+        * Do some calculation for X. Whether we approach from left or
+        * right depends on the shortest distance.
+        */
+
+        var xmovdir = 1;
+        var xdist = 0;
+
+        if (xpos) {
+            // Re-calculate position in order to center the view
+            xpos = xpos-this.vw/2*this.ih*this.posz/this.vh;
+
+            // Target position is to the right from current position
+            if (xpos > this.posx) {
+                xdist = xpos - this.posx;
+
+                // Distance is shorter if moving the the left
+                if (xdist > (this.posx + this.iw - xpos)) {
+                    xdist = this.posx + this.iw - xpos;
+                    xmovdir = -1;
+                }
+            } else {
+                xdist = this.posx - xpos;
+                xmovdir = -1;
+
+                // Distance is shorter if moving to the right
+                if (xdist > (xpos + this.iw - this.posx)) {
+                    xdist = xpos + this.iw - this.posx;
+                    xmovdir = 1;
+                }
+            }
         }
 
-        if (!(acc == 1 || acc == -1)) {
-            throw new Error("Parameter acc must be either 1 or -1");
+        /*
+        * Do some calculation for Y. Unlike for X we don't have a 360
+        * degree view so we cannot move a arbitrary distance in any of
+        * the direction.
+        */
+
+        var ymovdir = 1;
+        var ydist = 0;
+
+        if (ypos) {
+            // Re-calculate position in order to center the view
+            ypos = ypos-(this.ih/2)*this.posz;
+
+            var ydist = ypos - this.posy;
+
+            // Respect the borders, don't go any further
+            if ((this.posy + ydist) < 0) {
+                ydist = -this.posy;
+            } else if ((this.posy + ydist) > (this.ih - this.posz*this.ih)) {
+                ydist = (this.ih - this.posz*this.ih) - this.posy;
+            }
+
+            ymovdir = (ydist < 0) ? -1 : 1;
+            ydist = Math.abs(ydist);
         }
 
-        speed += acc * 20;
+        this.animation_running = true;
+        this._animatedMove(xdist, xmovdir, ydist, ymovdir);
+    }
 
-        if (cov >= dist/2) acc = -1;
+    /**
+     * This function IS NOT meant to be called by the user but by the function animatedCenterMove()
+     * only. See description for animatedCenterMove().
+     * @param {number} xdist - Distance to be covered on the X axis, must be zero or positive. Zero
+     *                          mean no mevoment on the X axis.
+     * @param {number} xmovdir - Moving direction on the X axis. Either to the right (set to 1, e.g.
+     *                          from north to east) or to the left (set to -1, e.g. from north to west)
+     * @param {number} ydist - Like xmovdir but for Y axis whereat -1 means upwards (to the sky) and 1
+     *                          means downwards (to the ground).
+     * @param {number} ymovdir - Like xdist but for Y axis
+     * @param {number} xcov - Covered distance so far on the X axis
+     * @param {number} xspeed - Current speed of movement on the X axis
+     * @param {number} xacc - Indicates whether the speed on the X axis is increasing (1) or decreasing (-1)
+     * @param {number} ycov - Like xvoc but for Y axis
+     * @param {number} yspeed - Like xspeed but for Y axis
+     * @param {number} yacc - Like xacc but for Y axis
+     */
+    _animatedMove(xdist=0, xmovdir=0, ydist=0, ymovdir=0, xcov=0, xspeed=0, xacc=1, ycov=0, yspeed=0, yacc=1) {
 
-        if ((cov + speed) > dist) speed = dist - cov;
+        // Handle X movement
+        if (xdist > 0) {
+            xspeed += xacc * 20;
 
-        cov += speed;
-        this.movex(movdir * speed);
+            if (xcov >= xdist/2) xacc = -1;
 
-        if (cov < dist && this.animation_running) {
-            setTimeout(this.animatedMoveToXPos.bind(this), 50, dist, movdir, cov, speed, acc);
+            if ((xcov + xspeed) > xdist) xspeed = xdist - xcov;
+
+            xcov += xspeed;
+            this.movex(xmovdir * xspeed);
+
+            if (xcov >= xdist) xdist = 0;
+        }
+
+        // Handle Y movement
+        if (ydist > 0) {
+            yspeed += yacc * 20;
+
+            if (ycov >= ydist/2) yacc = -1;
+
+            if ((ycov + yspeed) > ydist) yspeed = ydist - ycov;
+
+            ycov += yspeed;
+            this.movey(ymovdir * yspeed);
+
+            if (ycov >= ydist) ydist = 0;
+        }
+
+        if ((xdist + ydist) > 0 && this.animation_running) {
+            setTimeout(this._animatedMove.bind(this), 50, xdist, xmovdir, ydist,
+                ymovdir, xcov, xspeed, xacc, ycov, yspeed, yacc);
         } else {
             this.animation_running = false;
         }
@@ -456,21 +527,18 @@ class KolkturmViewer {
         // Currently only the center-top position is calculated if not given by json data. This is
         // the position over which the object information is displayed.
         json_data.forEach(function(obj) {
-            // Upper left corner of the object
-            var x1 = null;
-            var y1 = null;
-
-            // X position of the lower right corner of the object
-            var x2 = 0;
+            var xs = [];
+            var ys = [];
 
             obj.areas.forEach(function(area) {
-                if (x1 > area.x || x1 == null) x1 = area.x;
-                if (y1 > area.y || y1 == null) y1 = area.y;
-                if (x2 < (area.x + area.width)) x2 = area.x + area.width;
+                xs.push(area.x, area.x + area.width);
+                ys.push(area.y, area.y + area.height);
             });
 
-            if (!obj.pointer_x) obj.pointer_x = x1 + (x2 - x1)/2;
-            if (!obj.pointer_y) obj.pointer_y = y1;
+            obj.xmidpos = Math.min(...xs) + (Math.max(...xs) - Math.min(...xs))/2;
+            obj.ymidpos = Math.min(...ys) + (Math.max(...ys) - Math.min(...ys))/2;
+            if (!obj.pointer_x) obj.pointer_x = obj.xmidpos;
+            if (!obj.pointer_y) obj.pointer_y = Math.min(...ys);
         });
 
         return json_data;
@@ -528,8 +596,21 @@ class KolkturmViewer {
      * @param {number} area_id - Optional: Index of the area within the selected element of this.objects
      */
     showObject(obj_id, area_id) {
-        // TODO: Write code
+        // TODO: Remove console log and display information div
         console.log("Showing object " + this.objects[obj_id].name);
+
+        var xpos, ypos;
+
+        if (area_id) {
+            var area = this.objects[obj_id].areas[area_id];
+            xpos = area.x + area.width/2;
+            ypos = area.y + area.height/2;
+        } else {
+            xpos = this.objects[obj_id].xmidpos;
+            ypos = this.objects[obj_id].ymidpos;
+        }
+
+        this.animatedCenterMove(xpos, ypos);
     }
 
     /**
