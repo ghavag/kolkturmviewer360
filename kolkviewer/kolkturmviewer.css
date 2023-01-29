@@ -6,16 +6,21 @@
     vertical-align: bottom;
 }
 
+.ktv-objinfo table {
+    border-collapse: collapse;
+}
+
+/* Info div generic attributes */
 .ktv-objinfo {
     position: absolute;
     display: none;
     background: black;
     border: 1px solid white;
     padding: 10px;
-    padding-bottom: 15px;
     color: white;
     border-radius: 10px;
     box-shadow: 0 0 7px black;
+    white-space: nowrap;
 }
 
 .ktv-objinfo:after {
@@ -23,6 +28,18 @@
     border: 1px solid white;
     content: "";
     position: absolute;
+    box-shadow: 6px 5px 9px -9px black;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+/* Info div with bottom arrow */
+.ktv-objinfo-arrow-bottom {
+    padding-bottom: 15px;
+}
+
+.ktv-objinfo-arrow-bottom:after {
     left: 50%;
     top: 100%;
     bottom: -20px;
@@ -32,12 +49,70 @@
     border-left: 0px;
     margin-left: -12px;
     margin-top: -12px;
+}
+
+/* Info div with top arrow */
+.ktv-objinfo-arrow-top {
+    position: absolute;
+    display: none;
+    background: black;
+    border: 1px solid white;
+    padding: 10px;
+    padding-bottom: 15px;
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 7px black;
+    white-space: nowrap;
+}
+
+.ktv-objinfo-arrow-top:after {
+    background: black;
+    border: 1px solid white;
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0%;
+    bottom: -20px;
+    width: 24px;
+    height: 24px;
+    border-bottom: 0px;
+    border-right: 0px;
+    margin-bottom: -12px;
+    margin-right: -12px;
     box-shadow: 6px 5px 9px -9px black;
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
 }
 
-.ktv-objinfo table {
-    border-collapse: collapse;
+/* Info div with left arrow */
+.ktv-objinfo-arrow-left {
+    padding-left: 13px;
+}
+
+.ktv-objinfo-arrow-left:after {
+    left: 0;
+    top: 50%;
+    width: 20px;
+    height: 20px;
+    border-top: 0px;
+    border-right: 0px;
+    margin-top: -10px;
+    margin-left: -11px;
+}
+
+/* Info div with right arrow */
+.ktv-objinfo-arrow-right {
+    padding-right: 13px;
+}
+
+.ktv-objinfo-arrow-right:after {
+    right: 0;
+    top: 50%;
+    width: 20px;
+    height: 20px;
+    border-bottom: 0px;
+    border-left: 0px;
+    margin-top: -10px;
+    margin-right: -11px;
 }

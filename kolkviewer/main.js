@@ -50,7 +50,17 @@ class KolkturmViewer {
 
     objects = [];
     last_hovered_object = null;
-    objinfo_div = null;
+    objinfo_div = null; // Hold <div> displayed when hovering over an object
+    //fixed_objinfo_div = null;
+    fixed_objinfo = {
+        x: 0, y: 0, // Center position
+        r: 0, // Right border (x position)
+        l: 0, // Left border (x position)
+        my: 0, // Middle y position
+        display: false,
+        object_id: null,
+        area_id: null
+    };
     draw_all_object_areas = true;
     draw_object_areas_on_mouseover = false;
 
@@ -72,7 +82,10 @@ class KolkturmViewer {
         this.wrapper = $("#kolkturmviewer");
         this.canvas = $("<canvas>").appendTo(this.wrapper).get(0);
         this.ctx2d = this.canvas.getContext('2d');
-        this.objinfo_div = $("<div>", { class: "ktv-objinfo" }).appendTo(this.wrapper);
+
+        // Order of object info divs elements matter
+        this.fixed_objinfo.div = $("<div>").appendTo(this.wrapper);
+        this.objinfo_div = $("<div>", { class: "ktv-objinfo ktv-objinfo-arrow-bottom" }).appendTo(this.wrapper);
 
         this.vw = $(this.wrapper).width();
         this.vh = $(this.wrapper).height();
@@ -191,14 +204,16 @@ class KolkturmViewer {
         var iy = event.pageY*(this.ih*this.posz/this.vh) + this.posy;
         var hovered_object = null;
         var hovered_area_index = null;
+        var fixed_objinfo = this.fixed_objinfo;
 
-        this.objects.forEach(function(o) {
-            o.areas.forEach(function(a, i) {
+        this.objects.forEach(function(o, oi) {
+            o.areas.forEach(function(a, ai) {
                 if ((ix >= a.x && ix <= (a.x + a.width)) && (iy >= a.y && iy <= (a.y + a.height))) {
+                    if (fixed_objinfo.object_id == oi && (!o.one_marker_per_area || fixed_objinfo.area_id == ai)) return;
                     hovered_object = o;
 
                     if (o.one_marker_per_area) {
-                        hovered_area_index = i;
+                        hovered_area_index = ai;
                         o.pointer_x = a.x + a.width/2;
                         o.pointer_y= a.y;
                     }
@@ -396,8 +411,12 @@ class KolkturmViewer {
      *                          null is passed no movement takes place on the X axis
      * @param {number} ypos - Target position on the Y axis in image space or null. If
      *                          null is passed no movement takes place on the Y axis
+     * @param {callable} readyfunc - The final function to be called after the movement animation has been
+     *                                  completed or null. The function will only be called if the animation
+     *                                  wasn't aborted, e.g. by the user pressing Esc.
+     * @param {args} readyfuncargs - A arbitrary number of arguments to be passed to the final function
      */
-    animatedCenterMove(xpos=null, ypos=null) {
+    animatedCenterMove(xpos=null, ypos=null, readyfunc=null, ...readyfuncargs) {
         /*
         * Do some calculation for X. Whether we approach from left or
         * right depends on the shortest distance.
@@ -458,7 +477,7 @@ class KolkturmViewer {
         }
 
         this.animation_running = true;
-        this._animatedMove(xdist, xmovdir, ydist, ymovdir);
+        this._animatedMove(xdist, xmovdir, ydist, ymovdir, 0, 0, 1, 0, 0, 1, readyfunc, ...readyfuncargs);
     }
 
     /**
@@ -477,8 +496,12 @@ class KolkturmViewer {
      * @param {number} ycov - Like xvoc but for Y axis
      * @param {number} yspeed - Like xspeed but for Y axis
      * @param {number} yacc - Like xacc but for Y axis
+     * @param {callable} readyfunc - The final function to be called after the movement animation has been
+     *                                  completed or null. The function will only be called if the animation
+     *                                  wasn't aborted, e.g. by the user pressing Esc.
+     * @param {args} readyfuncargs - A arbitrary number of arguments to be passed to the final function
      */
-    _animatedMove(xdist=0, xmovdir=0, ydist=0, ymovdir=0, xcov=0, xspeed=0, xacc=1, ycov=0, yspeed=0, yacc=1) {
+    _animatedMove(xdist, xmovdir, ydist, ymovdir, xcov, xspeed, xacc, ycov, yspeed, yacc, readyfunc, ...readyfuncargs) {
 
         // Handle X movement
         if (xdist > 0) {
@@ -496,7 +519,7 @@ class KolkturmViewer {
 
         // Handle Y movement
         if (ydist > 0) {
-            yspeed += yacc * 20;
+            yspeed += yacc * 10;
 
             if (ycov >= ydist/2) yacc = -1;
 
@@ -510,8 +533,14 @@ class KolkturmViewer {
 
         if ((xdist + ydist) > 0 && this.animation_running) {
             setTimeout(this._animatedMove.bind(this), 50, xdist, xmovdir, ydist,
-                ymovdir, xcov, xspeed, xacc, ycov, yspeed, yacc);
+                ymovdir, xcov, xspeed, xacc, ycov, yspeed, yacc, readyfunc, ...readyfuncargs);
         } else {
+            // If this.animation_running is false already this means that the animation has been abroted, e.g.
+            // by the user pressing Esc. In that case we will not call the final function (readyfunc).
+            if (this.animation_running && readyfunc) {
+                readyfunc(...readyfuncargs);
+            }
+
             this.animation_running = false;
         }
 
@@ -537,6 +566,9 @@ class KolkturmViewer {
 
             obj.xmidpos = Math.min(...xs) + (Math.max(...xs) - Math.min(...xs))/2;
             obj.ymidpos = Math.min(...ys) + (Math.max(...ys) - Math.min(...ys))/2;
+            obj.t = Math.min(...ys); // Top border y position
+            obj.r = Math.max(...xs); // Right border x position
+            obj.l = Math.min(...xs); // Left border x position
             if (!obj.pointer_x) obj.pointer_x = obj.xmidpos;
             if (!obj.pointer_y) obj.pointer_y = Math.min(...ys);
         });
@@ -577,7 +609,7 @@ class KolkturmViewer {
         this.objinfo_div.html(html);
 
         var x = (obj.pointer_x - this.posx)*(this.vh/(this.ih*this.posz)) - this.objinfo_div.outerWidth()/2;
-        var y = (obj.pointer_y - this.posy)/(this.ih*this.posz/this.vh) - this.objinfo_div.outerHeight() - 12; // Add 12 extra pixels for the arrow at the bottom
+        var y = (obj.pointer_y - this.posy)/(this.ih*this.posz/this.vh) - this.objinfo_div.outerHeight() - 16; // Add extra space for the arrow at the bottom
 
         this.objinfo_div.css({top: y, left: x});
         this.objinfo_div.show();
@@ -596,21 +628,107 @@ class KolkturmViewer {
      * @param {number} area_id - Optional: Index of the area within the selected element of this.objects
      */
     showObject(obj_id, area_id) {
-        // TODO: Remove console log and display information div
-        console.log("Showing object " + this.objects[obj_id].name);
-
         var xpos, ypos;
 
         if (area_id) {
             var area = this.objects[obj_id].areas[area_id];
             xpos = area.x + area.width/2;
             ypos = area.y + area.height/2;
+            this.fixed_objinfo.y = area.y;
+            this.fixed_objinfo.r = area.x + area.width;
+            this.fixed_objinfo.l = area.x;
         } else {
             xpos = this.objects[obj_id].xmidpos;
             ypos = this.objects[obj_id].ymidpos;
+            this.fixed_objinfo.y = this.objects[obj_id].t; //this.objects[obj_id].areas[0].y;
+            this.fixed_objinfo.r = this.objects[obj_id].r;
+            this.fixed_objinfo.l = this.objects[obj_id].l;
         }
 
-        this.animatedCenterMove(xpos, ypos);
+        this.fixed_objinfo.x = xpos;
+        this.fixed_objinfo.my = ypos;
+
+        this.fixed_objinfo.div.hide();
+
+        this.animatedCenterMove(xpos, ypos, this.showFixedObjectInformation.bind(this), obj_id, area_id);
+    }
+
+    /**
+     * Displays the fixed object information div.
+     * @param {number} obj_id - Index of the object in this.objects array
+     * @param {number} area_id - Index of the area within the selected element of this.objects
+     */
+    showFixedObjectInformation(obj_id, area_id) {
+        console.log("Showing object " + this.objects[obj_id].name);
+
+        this.fixed_objinfo.div.html(this.objects[obj_id].name);
+        this.fixed_objinfo.object_id = obj_id;
+        this.fixed_objinfo.area_id = area_id;
+        this.fixed_objinfo.display = true;
+        this.positionFixedObjectInformation();
+        this.fixed_objinfo.div.show();
+    }
+
+    /**
+     * Calculates the position of the fixed object information div and changes the appearance as it fits.
+     */
+    positionFixedObjectInformation() {
+        if (!this.fixed_objinfo.display) return;
+
+        const arrow_spacing_bt = 18; // Required extra space for arrow pointing up or down
+        const arrow_spacing_lr = 14; // Required extra space for arrow pointing left or right
+
+        // Object middle top position in view space
+        var obj_x = (this.fixed_objinfo.x - this.posx)*(this.vh/(this.ih*this.posz));
+        var obj_y = (this.fixed_objinfo.y - this.posy)/(this.ih*this.posz/this.vh);
+
+        var x = obj_x - this.fixed_objinfo.div.outerWidth()/2;
+        var y = obj_y - this.fixed_objinfo.div.outerHeight() - arrow_spacing_bt; // Add extra space for the arrow
+        //console.log("ow: " + (this.fixed_objinfo.div.outerWidth()) + " vw: " + this.vw);
+        var sideward_pointing = false; // True if info div is pointing to the left or right
+
+        // Object is to far to the left
+        if (x < 0) {
+            //console.log("Object is to far to the left");
+            // Re-caculate div position and transform appearance to left arrow
+            x = (this.fixed_objinfo.r - this.posx)*(this.vh/(this.ih*this.posz)) + arrow_spacing_lr; // Add extra space for the arrow
+            y = (this.fixed_objinfo.my - this.posy)/(this.ih*this.posz/this.vh) - this.fixed_objinfo.div.outerHeight()/2;
+            // If div would leave the view area pin it to the left
+            if (x < 14) x = 14; // Don't let the div escape to the left and let some space for the arrow
+            $(this.fixed_objinfo.div).attr({"class": "ktv-objinfo ktv-objinfo-arrow-left"});
+            sideward_pointing = true;
+        // Object is to far to the right
+        } else if ((x + this.fixed_objinfo.div.outerWidth()) >= this.vw) {
+            //console.log("Object is to far to the right");
+            // Re-caculate div position and transform appearance to left arrow
+            x = (this.fixed_objinfo.l - this.posx)*(this.vh/(this.ih*this.posz)) - this.fixed_objinfo.div.outerWidth() - arrow_spacing_lr; // Add extra space for the arrow
+            y = (this.fixed_objinfo.my - this.posy)/(this.ih*this.posz/this.vh) - this.fixed_objinfo.div.outerHeight()/2;
+            // If div would leave the view area pin it to the left
+            //if (x >= (this.vw + this.fixed_objinfo.div.outerWidth())) x = (this.vw + this.fixed_objinfo.div.outerWidth()) - 14; // Let some space for the arrow
+            if (x > (this.vw - this.fixed_objinfo.div.outerWidth() - arrow_spacing_lr)) x = (this.vw - this.fixed_objinfo.div.outerWidth() - arrow_spacing_lr); // Don't let the div escape to the right and let some space for the arrow
+            $(this.fixed_objinfo.div).attr({"class": "ktv-objinfo ktv-objinfo-arrow-right"});
+            sideward_pointing = true;
+        } else {
+            //console.log("Object not to far in any direction");
+            //x = obj_x - this.fixed_objinfo.div.outerWidth()/2;
+            //y = obj_y - this.fixed_objinfo.div.outerHeight() - 16; // Add extra space for the arrow
+            $(this.fixed_objinfo.div).attr({"class": "ktv-objinfo ktv-objinfo-arrow-bottom"});
+        }
+
+        var bottom_spacing = this.vh - this.fixed_objinfo.div.outerHeight();
+
+        if (!sideward_pointing) {
+            bottom_spacing = bottom_spacing - arrow_spacing_bt;
+        }
+
+        // Object has escaped downwards
+        if (y > bottom_spacing) {
+            y = bottom_spacing;
+        }
+
+        // TODO: Handle case where object escaped upwards
+
+        this.fixed_objinfo.div.css({top: y, left: x});
     }
 
     /**
@@ -785,5 +903,7 @@ class KolkturmViewer {
                 this.drawObjectAreas(o);
             }.bind(this));
         }
+
+        this.positionFixedObjectInformation();
     }
 }
