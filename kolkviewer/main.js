@@ -56,10 +56,12 @@ class KolkturmViewer {
         x: 0, y: 0, // Center position
         r: 0, // Right border (x position)
         l: 0, // Left border (x position)
+        b: 0, // Bottom border (y position)
         my: 0, // Middle y position
         display: false,
         object_id: null,
-        area_id: null
+        area_id: null,
+        arrow: {div: null, hw: null}
     };
     draw_all_object_areas = true;
     draw_object_areas_on_mouseover = false;
@@ -85,6 +87,10 @@ class KolkturmViewer {
 
         // Order of object info divs elements matter
         this.fixed_objinfo.div = $("<div>").appendTo(this.wrapper);
+
+        this.fixed_objinfo.arrow.div = $("<div>", { class: "ktv-objinfo-arrow" }).html("<svg width=\"20\" height=\"20\" xmlns=\"http://www.w3.org/2000/svg\"><path id=\"lineAB\" d=\"M 0 20 l 10 -20 l 10 20 q -10 -10 -20 0\" fill=\"black\" stroke=\"white\" /></svg>");
+        this.fixed_objinfo.arrow.hw = 20; // Hight and width of the arror
+
         this.objinfo_div = $("<div>", { class: "ktv-objinfo ktv-objinfo-arrow-bottom" }).appendTo(this.wrapper);
 
         this.vw = $(this.wrapper).width();
@@ -567,6 +573,7 @@ class KolkturmViewer {
             obj.xmidpos = Math.min(...xs) + (Math.max(...xs) - Math.min(...xs))/2;
             obj.ymidpos = Math.min(...ys) + (Math.max(...ys) - Math.min(...ys))/2;
             obj.t = Math.min(...ys); // Top border y position
+            obj.b = Math.max(...ys); // Bottom border y position
             obj.r = Math.max(...xs); // Right border x position
             obj.l = Math.min(...xs); // Left border x position
             if (!obj.pointer_x) obj.pointer_x = obj.xmidpos;
@@ -637,12 +644,14 @@ class KolkturmViewer {
             this.fixed_objinfo.y = area.y;
             this.fixed_objinfo.r = area.x + area.width;
             this.fixed_objinfo.l = area.x;
+            this.fixed_objinfo.b = area.y + area.height;
         } else {
             xpos = this.objects[obj_id].xmidpos;
             ypos = this.objects[obj_id].ymidpos;
             this.fixed_objinfo.y = this.objects[obj_id].t; //this.objects[obj_id].areas[0].y;
             this.fixed_objinfo.r = this.objects[obj_id].r;
             this.fixed_objinfo.l = this.objects[obj_id].l;
+            this.fixed_objinfo.b = this.objects[obj_id].b;
         }
 
         this.fixed_objinfo.x = xpos;
@@ -662,6 +671,7 @@ class KolkturmViewer {
         console.log("Showing object " + this.objects[obj_id].name);
 
         this.fixed_objinfo.div.html(this.objects[obj_id].name);
+        this.fixed_objinfo.arrow.div.appendTo(this.fixed_objinfo.div);
         this.fixed_objinfo.object_id = obj_id;
         this.fixed_objinfo.area_id = area_id;
         this.fixed_objinfo.display = true;
@@ -675,8 +685,8 @@ class KolkturmViewer {
     positionFixedObjectInformation() {
         if (!this.fixed_objinfo.display) return;
 
-        const arrow_spacing_bt = 18; // Required extra space for arrow pointing up or down
-        const arrow_spacing_lr = 14; // Required extra space for arrow pointing left or right
+        const arrow_spacing_bt = this.fixed_objinfo.arrow.hw; // Required extra space for arrow pointing up or down
+        const arrow_spacing_lr = this.fixed_objinfo.arrow.hw + 8; // Required extra space for arrow pointing left or right
 
         // Object middle top position in view space
         var obj_x = (this.fixed_objinfo.x - this.posx)*(this.vh/(this.ih*this.posz));
@@ -686,28 +696,45 @@ class KolkturmViewer {
         var y = obj_y - this.fixed_objinfo.div.outerHeight() - arrow_spacing_bt; // Add extra space for the arrow
         //console.log("ow: " + (this.fixed_objinfo.div.outerWidth()) + " vw: " + this.vw);
         var sideward_pointing = false; // True if info div is pointing to the left or right
+        var bottom_spacing = this.vh - this.fixed_objinfo.div.outerHeight() - 22;
 
+        /* Handle object out of ranche on x axis */
         // Object is to far to the left
         if (x < 0) {
             //console.log("Object is to far to the left");
-            // Re-caculate div position and transform appearance to left arrow
+            // Re-caculate div position 
             x = (this.fixed_objinfo.r - this.posx)*(this.vh/(this.ih*this.posz)) + arrow_spacing_lr; // Add extra space for the arrow
             y = (this.fixed_objinfo.my - this.posy)/(this.ih*this.posz/this.vh) - this.fixed_objinfo.div.outerHeight()/2;
             // If div would leave the view area pin it to the left
-            if (x < 14) x = 14; // Don't let the div escape to the left and let some space for the arrow
-            $(this.fixed_objinfo.div).attr({"class": "ktv-objinfo ktv-objinfo-arrow-left"});
+            if (x < (this.fixed_objinfo.arrow.hw + 5)) x = (this.fixed_objinfo.arrow.hw + 5); // Don't let the div escape to the left and let some space for the arrow
+            $(this.fixed_objinfo.div).attr({"class": "ktv-objinfo"});
             sideward_pointing = true;
+
+            $(this.fixed_objinfo.arrow.div).css({
+                top: ((this.fixed_objinfo.div.outerHeight() - this.fixed_objinfo.arrow.hw - 8 /* compensate objinfo_div padding*/) / 2),
+                left: -(this.fixed_objinfo.arrow.hw + 5),
+                transform: 'rotate(-90deg)'
+            });
+
+            //console.log("outerHeight: " + this.fixed_objinfo.div.outerHeight());
         // Object is to far to the right
         } else if ((x + this.fixed_objinfo.div.outerWidth()) >= this.vw) {
             //console.log("Object is to far to the right");
-            // Re-caculate div position and transform appearance to left arrow
+            // Re-caculate div position
             x = (this.fixed_objinfo.l - this.posx)*(this.vh/(this.ih*this.posz)) - this.fixed_objinfo.div.outerWidth() - arrow_spacing_lr; // Add extra space for the arrow
             y = (this.fixed_objinfo.my - this.posy)/(this.ih*this.posz/this.vh) - this.fixed_objinfo.div.outerHeight()/2;
             // If div would leave the view area pin it to the left
             //if (x >= (this.vw + this.fixed_objinfo.div.outerWidth())) x = (this.vw + this.fixed_objinfo.div.outerWidth()) - 14; // Let some space for the arrow
             if (x > (this.vw - this.fixed_objinfo.div.outerWidth() - arrow_spacing_lr)) x = (this.vw - this.fixed_objinfo.div.outerWidth() - arrow_spacing_lr); // Don't let the div escape to the right and let some space for the arrow
-            $(this.fixed_objinfo.div).attr({"class": "ktv-objinfo ktv-objinfo-arrow-right"});
+            $(this.fixed_objinfo.div).attr({"class": "ktv-objinfo"});
             sideward_pointing = true;
+
+            $(this.fixed_objinfo.arrow.div).css({
+                top: ((this.fixed_objinfo.div.outerHeight() - this.fixed_objinfo.arrow.hw - 8 /* compensate objinfo_div padding*/) / 2),
+                left: (this.fixed_objinfo.div.outerWidth() + 5),
+                transform: 'rotate(90deg)'
+            });
+        // Object is to far to the bottom
         } else {
             //console.log("Object not to far in any direction");
             //x = obj_x - this.fixed_objinfo.div.outerWidth()/2;
@@ -715,16 +742,41 @@ class KolkturmViewer {
             $(this.fixed_objinfo.div).attr({"class": "ktv-objinfo ktv-objinfo-arrow-bottom"});
         }
 
-        var bottom_spacing = this.vh - this.fixed_objinfo.div.outerHeight();
+        /* Handle object out of ranche on y axis */
+        if (y < 0) {
+            sideward_pointing = true;
+            y = (this.fixed_objinfo.b - this.posy)/(this.ih*this.posz/this.vh) + arrow_spacing_lr;
+            if (y < arrow_spacing_lr) y = arrow_spacing_lr;
+            $(this.fixed_objinfo.div).attr({"class": "ktv-objinfo"});
 
-        if (!sideward_pointing) {
+            $(this.fixed_objinfo.arrow.div).css({
+                top: -arrow_spacing_lr,
+                left: ((this.fixed_objinfo.div.outerWidth() - this.fixed_objinfo.arrow.hw) / 2) - 2,
+                transform: 'rotate(0deg)'
+            }); 
+        } else if (y > bottom_spacing) {
+            $(this.fixed_objinfo.div).attr({"class": "ktv-objinfo"});
+            y = this.vh - this.fixed_objinfo.div.outerHeight() - this.fixed_objinfo.arrow.hw - 10;
+            sideward_pointing = true;
+
+            $(this.fixed_objinfo.arrow.div).css({
+                top: (this.fixed_objinfo.div.outerHeight()),
+                left: ((this.fixed_objinfo.div.outerWidth() - this.fixed_objinfo.arrow.hw) / 2) - 2,
+                transform: 'rotate(180deg)'
+            });
+        }
+
+        if (sideward_pointing) {
+            $(this.fixed_objinfo.arrow.div).show();
+        } else {
             bottom_spacing = bottom_spacing - arrow_spacing_bt;
+            $(this.fixed_objinfo.arrow.div).hide();
         }
 
         // Object has escaped downwards
-        if (y > bottom_spacing) {
+        /*if (y > bottom_spacing) {
             y = bottom_spacing;
-        }
+        }*/
 
         // TODO: Handle case where object escaped upwards
 
