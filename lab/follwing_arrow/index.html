@@ -17,6 +17,10 @@
       var objdiv_y = 0;
       var objdiv_h = 0;
       var objdiv_w = 0;
+      var objdiv_min_x = 0;
+      var objdiv_max_x = 0;
+      var objdiv_min_y = 0;
+      var objdiv_max_y = 0;
       var mouse_x = null;
       var mouse_y = null;
       var mouseclicked = false;
@@ -26,6 +30,7 @@
       var arrow_h = 0;
       var object_x = 0;
       var object_y = 0;
+      var arrow_spacing = 3;
 
       $(document).ready(function() {
         wrapper = $("#kolkturmviewer");
@@ -60,13 +65,10 @@
         canvas.width = vw;
         canvas.height = vh;
 
-        objdiv_x = (vw - objdiv_w) / 2;
-        objdiv_y = (vh - objdiv_h) / 2;
-
-        console.log("objdiv_w = " + objdiv_w + " objdiv_h = " + objdiv_h);
-        console.log("vw = " + vw + " vh = " + vh);
-
-        objdiv.css({top: objdiv_y, left: objdiv_x});
+        objdiv_min_x = arrow_w + arrow_spacing;
+        objdiv_max_x = vw - objdiv_w - arrow_w - arrow_spacing;
+        objdiv_min_y = arrow_h + arrow_spacing;
+        objdiv_max_y = vh - objdiv_h - arrow_h - arrow_spacing;
 
         draw();
       }
@@ -101,58 +103,40 @@
       }
 
       function draw() {
-        ctx2d.clearRect(0, 0, vw, vh);
+        /*
+        * Handle object information div (objdiv) following the object
+        */
 
-        // Horizontal line
-        ctx2d.beginPath();
-        ctx2d.strokeStyle = "black";
-        ctx2d.moveTo(0, vh/2);
-        ctx2d.lineTo(vw, vh/2);
-        ctx2d.stroke();
+        var objdiv_min_x = arrow_w + arrow_spacing;
+        var objdiv_max_x = vw - objdiv_w - arrow_w - arrow_spacing;
+        var objdiv_min_y = arrow_h + arrow_spacing;
+        var objdiv_max_y = vh - objdiv_h - arrow_h - arrow_spacing;
 
-        // Vertical line
-        ctx2d.beginPath();
-        ctx2d.strokeStyle = "black";
-        ctx2d.moveTo(vw/2, 0);
-        ctx2d.lineTo(vw/2, vh);
-        ctx2d.stroke();
+        objdiv_x = Math.min(Math.max(object_x - objdiv_w / 2, objdiv_min_x), objdiv_max_x);
+        objdiv_y = Math.min(object_y - objdiv_h - arrow_h - arrow_spacing, objdiv_max_y);
 
-        // Vertical line which marks left part after the round corners
-        ctx2d.beginPath();
-        ctx2d.strokeStyle = "grey";
-        ctx2d.moveTo(objdiv_x + 10, 0);
-        ctx2d.lineTo(objdiv_x + 10, vh);
-        ctx2d.stroke();
+        // If objdiv left screen to the top re-arrange
+        if (objdiv_y < 0) {
+          objdiv_y = Math.max(object_y + arrow_h + arrow_spacing, objdiv_min_y);
+        }
 
-        // Vertical line which marks right part before the round corners
-        ctx2d.beginPath();
-        ctx2d.strokeStyle = "grey";
-        ctx2d.moveTo(objdiv_x + objdiv_w - 10, 0);
-        ctx2d.lineTo(objdiv_x + objdiv_w - 10, vh);
-        ctx2d.stroke();
+        objdiv.css({top: objdiv_y, left: objdiv_x});
 
-        ctx2d.beginPath();
-        ctx2d.strokeStyle = "red";
-        ctx2d.arc(object_x, object_y, 10, 0, 2 * Math.PI);
-        ctx2d.stroke();
-        ctx2d.closePath();
+        /*
+        * Handle arrow around object information div (objdiv)
+        */
+
+        var angle_center_x = objdiv_x + objdiv_w / 2;
+        var angle_center_y = objdiv_y + objdiv_h / 2;
+
+        var arrow_x = 0;
+        var arrow_y = 0;
+        var alpha = 0;
 
         var xmin = objdiv_x + objdiv_br;
         var xmax = objdiv_x + objdiv_w - objdiv_br;
         var ymin = objdiv_y + objdiv_br;
         var ymax = objdiv_y + objdiv_h - objdiv_br;
-
-        var arrow_x = 0;
-        var arrow_y = 0;
-        var alpha = 0;
-        var arrow_spacing = 3;
-
-        var angle_center_x = vw / 2;
-        var angle_center_y = vh / 2;
-
-        /*
-        * Handle arrow around object information div (objdiv)
-        */
 
         /* Object is above the straight part of the objdiv */
         if ((object_x >= xmin) && (object_x <= xmax) && (object_y < objdiv_y)) {
@@ -237,13 +221,59 @@
           alpha = Math.asin(a / c); // Angle of alpha in radian
         }
 
+        arrow.css({top: arrow_y, left: arrow_x, transform: "rotate(" + alpha + "rad)"});
+
+        /*
+        * Do canvas work
+        */
+
+        var objdiv_center_x = objdiv_x + objdiv_w / 2;
+        var objdiv_center_y = objdiv_y + objdiv_h / 2;
+
+        // Clear everything
+        ctx2d.clearRect(0, 0, vw, vh);
+
+        // Horizontal line
+        ctx2d.beginPath();
+        ctx2d.strokeStyle = "black";
+        ctx2d.moveTo(0, objdiv_center_y);
+        ctx2d.lineTo(vw, objdiv_center_y);
+        ctx2d.stroke();
+
+        // Vertical line
+        ctx2d.beginPath();
+        ctx2d.strokeStyle = "black";
+        ctx2d.moveTo(objdiv_center_x, 0);
+        ctx2d.lineTo(objdiv_center_x, vh);
+        ctx2d.stroke();
+
+        // Vertical line which marks left part after the round corners
+        ctx2d.beginPath();
+        ctx2d.strokeStyle = "grey";
+        ctx2d.moveTo(objdiv_x + 10, 0);
+        ctx2d.lineTo(objdiv_x + 10, vh);
+        ctx2d.stroke();
+
+        // Vertical line which marks right part before the round corners
+        ctx2d.beginPath();
+        ctx2d.strokeStyle = "grey";
+        ctx2d.moveTo(objdiv_x + objdiv_w - 10, 0);
+        ctx2d.lineTo(objdiv_x + objdiv_w - 10, vh);
+        ctx2d.stroke();
+
+        // Draw the object
+        ctx2d.beginPath();
+        ctx2d.strokeStyle = "red";
+        ctx2d.arc(object_x, object_y, 10, 0, 2 * Math.PI);
+        ctx2d.stroke();
+        ctx2d.closePath();
+
+        // Draw red line from center point to object
         ctx2d.beginPath();
         ctx2d.strokeStyle = "red";
         ctx2d.moveTo(angle_center_x, angle_center_y);
         ctx2d.lineTo(object_x, object_y);
         ctx2d.stroke();
-
-        arrow.css({top: arrow_y, left: arrow_x, transform: "rotate(" + alpha + "rad)"});
       }
     </script>
     <style>
