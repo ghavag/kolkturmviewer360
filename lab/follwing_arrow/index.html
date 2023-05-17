@@ -17,12 +17,15 @@
       var objdiv_y = 0;
       var objdiv_h = 0;
       var objdiv_w = 0;
-      var mouse_x = 0;
-      var mouse_y = 0;
+      var mouse_x = null;
+      var mouse_y = null;
+      var mouseclicked = false;
       var objdiv_bw = 0; // Border width
       var objdiv_br = 10; // Border radius
       var arrow_w = 0;
       var arrow_h = 0;
+      var object_x = 0;
+      var object_y = 0;
 
       $(document).ready(function() {
         wrapper = $("#kolkturmviewer");
@@ -41,6 +44,11 @@
 
         $(window).resize(resizeHandler);
         $(document).mousemove(mouseMoveHandler);
+        $(canvas).mousedown(mouseDownHandler);
+        $(document).mouseup(mouseUpHandler); // Mouse up event must be bound to the document
+
+        object_x = $(wrapper).width() / 2;
+        object_y = $(wrapper).height() / 2;
 
         resizeHandler();
       });
@@ -64,10 +72,32 @@
       }
 
       function mouseMoveHandler(event) {
-        mouse_x = event.pageX;
-        mouse_y = event.pageY;
+        if (mouseclicked) {
+          if (mouse_x != null && mouse_y != null) {
+            var deltax = (event.pageX - mouse_x);
+            var deltay = (event.pageY - mouse_y);
+            object_x = Math.min(Math.max(object_x + deltax, -200), vw + 200);
+            object_y = Math.min(Math.max(object_y + deltay, -200), vh + 200);
 
-        draw();
+            draw();
+          }
+
+          mouse_x = event.pageX;
+          mouse_y = event.pageY;
+
+          console.log("Object position (x, y): " + object_x + ", " + object_y);
+        }
+      }
+
+      function mouseDownHandler(event) { // Left mouse button
+        mouseclicked = (event.which == 1);
+      }
+
+      function mouseUpHandler(event) {
+        if (event.which == 1) { // Left mouse button
+          mouseclicked = false;
+          mouse_x = mouse_y = null;
+        }
       }
 
       function draw() {
@@ -103,7 +133,7 @@
 
         ctx2d.beginPath();
         ctx2d.strokeStyle = "red";
-        ctx2d.arc(mouse_x, mouse_y, 10, 0, 2 * Math.PI);
+        ctx2d.arc(object_x, object_y, 10, 0, 2 * Math.PI);
         ctx2d.stroke();
         ctx2d.closePath();
 
@@ -125,71 +155,71 @@
         */
 
         /* Object is above the straight part of the objdiv */
-        if ((mouse_x >= xmin) && (mouse_x <= xmax) && (mouse_y < objdiv_y)) {
-          arrow_x = mouse_x - objdiv_x - (arrow_w / 2) - objdiv_bw;
+        if ((object_x >= xmin) && (object_x <= xmax) && (object_y < objdiv_y)) {
+          arrow_x = object_x - objdiv_x - (arrow_w / 2) - objdiv_bw;
           arrow_y = -arrow_h - arrow_spacing - objdiv_bw;
         /* Object is past the upper right corner of the objdiv */
-        } else if ((mouse_x > xmax) && (mouse_y < ymin)) {
+        } else if ((object_x > xmax) && (object_y < ymin)) {
           angle_center_x = xmax;
           angle_center_y = ymin;
 
           // Calculate angle for arrow
-          var a = mouse_x - xmax; // Opposite leg of alpha
-          var b = ymin - mouse_y; // Leg of alpha
+          var a = object_x - xmax; // Opposite leg of alpha
+          var b = ymin - object_y; // Leg of alpha
           var c = Math.sqrt(a*a + b*b) // Hypotenuse
           alpha = Math.asin(a / c); // Angle of alpha in radian
 
           arrow_x = objdiv_w - objdiv_br - (arrow_w / 2) - objdiv_bw + (Math.sin(alpha) * (objdiv_br + arrow_spacing + (arrow_w / 2)));
           arrow_y = objdiv_br - (arrow_h / 2) - (Math.cos(alpha) * (objdiv_br + (arrow_h / 2) + arrow_spacing + objdiv_bw));
         /* Object is to the right of the straight part of the objdiv */
-        } else if ((mouse_x > (objdiv_x + objdiv_w)) && (mouse_y >= ymin) && (mouse_y <= ymax)) {
+        } else if ((object_x > (objdiv_x + objdiv_w)) && (object_y >= ymin) && (object_y <= ymax)) {
           arrow_x = objdiv_w + arrow_spacing - objdiv_bw;
-          arrow_y = mouse_y - objdiv_y - (arrow_h / 2) - objdiv_bw;
+          arrow_y = object_y - objdiv_y - (arrow_h / 2) - objdiv_bw;
           alpha = Math.PI / 2;
         /* Object is past the lower right corner of the objdiv */
-        } else if ((mouse_x > xmax) && (mouse_y > ymax)) {
+        } else if ((object_x > xmax) && (object_y > ymax)) {
           angle_center_x = xmax;
           angle_center_y = ymax;
 
           // Calculate angle for arrow
-          var a = mouse_y - ymax; // Opposite leg of alpha
-          var b = mouse_x - xmax; // Leg of alpha
+          var a = object_y - ymax; // Opposite leg of alpha
+          var b = object_x - xmax; // Leg of alpha
           var c = Math.sqrt(a*a + b*b) // Hypotenuse
           alpha = (Math.PI / 2) + Math.asin(a / c); // Angle of alpha in radian
 
           arrow_x = objdiv_w - objdiv_br - (arrow_w / 2) - objdiv_bw + (Math.sin(alpha) * (objdiv_br + arrow_spacing + (arrow_w / 2)));
           arrow_y = objdiv_h - objdiv_br - (arrow_h / 2) - (Math.cos(alpha) * (objdiv_br + (arrow_h / 2) + arrow_spacing - objdiv_bw));
         /* Object is below the straight part of the objdiv */
-        } else if ((mouse_x >= xmin) && (mouse_x <= xmax) && (mouse_y > (objdiv_y + objdiv_h))) {
-          arrow_x = mouse_x - objdiv_x - (arrow_w / 2) - objdiv_bw;
+        } else if ((object_x >= xmin) && (object_x <= xmax) && (object_y > (objdiv_y + objdiv_h))) {
+          arrow_x = object_x - objdiv_x - (arrow_w / 2) - objdiv_bw;
           arrow_y = objdiv_h + arrow_spacing - objdiv_bw;
           alpha = Math.PI;
         /* Object is past the lower left corner of the objdiv */
-        } else if ((mouse_x < xmin) && (mouse_y > ymax)) {
+        } else if ((object_x < xmin) && (object_y > ymax)) {
           angle_center_x = xmin;
           angle_center_y = ymax;
 
           // Calculate angle for arrow
-          var a = xmin - mouse_x; // Opposite leg of alpha
-          var b = mouse_y - ymax; // Leg of alpha
+          var a = xmin - object_x; // Opposite leg of alpha
+          var b = object_y - ymax; // Leg of alpha
           var c = Math.sqrt(a*a + b*b) // Hypotenuse
           alpha = Math.PI + Math.asin(a / c); // Angle of alpha in radian
 
           arrow_x = objdiv_br - (arrow_w / 2) - 1 + (Math.sin(alpha) * (objdiv_br + arrow_spacing + (arrow_w / 2)));
           arrow_y = objdiv_h - objdiv_br - (arrow_h / 2) - (Math.cos(alpha) * (objdiv_br + (arrow_h / 2) + arrow_spacing - objdiv_bw));
         /* Object is to the right of the straight part of the objdiv */
-        } else if ((mouse_x < objdiv_x) && (mouse_y >= ymin) && (mouse_y <= ymax)) {
+        } else if ((object_x < objdiv_x) && (object_y >= ymin) && (object_y <= ymax)) {
           arrow_x = -arrow_w - arrow_spacing - objdiv_bw;
-          arrow_y = mouse_y - objdiv_y - (arrow_h / 2) - objdiv_bw;
+          arrow_y = object_y - objdiv_y - (arrow_h / 2) - objdiv_bw;
           alpha = Math.PI / 2 * 3;
         /* Object is past the upper left corner of the objdiv */
-        } else if ((mouse_x < xmin) && (mouse_y < ymin)) {
+        } else if ((object_x < xmin) && (object_y < ymin)) {
           angle_center_x = xmin;
           angle_center_y = ymin;
 
           // Calculate angle for arrow
-          var a = ymin - mouse_y; // Opposite leg of alpha
-          var b = xmin - mouse_x; // Leg of alpha
+          var a = ymin - object_y; // Opposite leg of alpha
+          var b = xmin - object_x; // Leg of alpha
           var c = Math.sqrt(a*a + b*b) // Hypotenuse
           alpha = (Math.PI / 2 * 3) + Math.asin(a / c); // Angle of alpha in radian
 
@@ -201,8 +231,8 @@
           arrow_y = (objdiv_h - arrow_h - 2) / 2;
 
           // Calculate angle for arrow
-          var a = mouse_x - vw/2; // Opposite leg of alpha
-          var b = vh/2 - mouse_y; // Leg of alpha
+          var a = object_x - vw/2; // Opposite leg of alpha
+          var b = vh/2 - object_y; // Leg of alpha
           var c = Math.sqrt(a*a + b*b) // Hypotenuse
           alpha = Math.asin(a / c); // Angle of alpha in radian
         }
@@ -210,7 +240,7 @@
         ctx2d.beginPath();
         ctx2d.strokeStyle = "red";
         ctx2d.moveTo(angle_center_x, angle_center_y);
-        ctx2d.lineTo(mouse_x, mouse_y);
+        ctx2d.lineTo(object_x, object_y);
         ctx2d.stroke();
 
         arrow.css({top: arrow_y, left: arrow_x, transform: "rotate(" + alpha + "rad)"});
