@@ -115,8 +115,16 @@
         objdiv_x = Math.min(Math.max(object_x - objdiv_w / 2, objdiv_min_x), objdiv_max_x);
         objdiv_y = Math.min(object_y - objdiv_h - arrow_h - arrow_spacing, objdiv_max_y);
 
-        // If objdiv left screen to the top re-arrange
-        if (objdiv_y < 0) {
+        // If object left screen to the right, re-arrange objdiv position
+        if (object_x < 0) {
+          objdiv_y = Math.max(Math.min(objdiv_y - object_x, object_y - objdiv_h / 2, objdiv_max_y), objdiv_min_y);
+        }
+        // If object left screen to the left, re-arrange objdiv position
+        else if (object_x > vw) {
+          objdiv_y = Math.max(Math.min(objdiv_y + (object_x - vw), object_y - objdiv_h / 2, objdiv_max_y), objdiv_min_y);
+        }
+        // If objdiv left screen to the top re-arrange it
+        else if (objdiv_y < 0) {
           objdiv_y = Math.max(object_y + arrow_h + arrow_spacing, objdiv_min_y);
         }
 
