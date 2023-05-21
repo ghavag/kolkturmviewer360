@@ -105,6 +105,11 @@ class KolkturmViewer {
             this.movex(-(this.vw/2*this.ih*this.posz/this.vh-this.nx_pos)); // That takes the north direction into the view center
             this.animation_running = false; // Stop loading animation
             this.resizeHandler();
+
+            // TODO: Remove those lines before merging feature/object-search-bar
+            this.posz = this.minz;
+            this.showObject(10);
+
             if (this.ready_function) this.ready_function();
         });
 
@@ -703,17 +708,26 @@ class KolkturmViewer {
         if (x < 0) {
             //console.log("Object is to far to the left");
             // Re-caculate div position 
-            x = (this.fixed_objinfo.r - this.posx)*(this.vh/(this.ih*this.posz)) + arrow_spacing_lr; // Add extra space for the arrow
-            y = (this.fixed_objinfo.my - this.posy)/(this.ih*this.posz/this.vh) - this.fixed_objinfo.div.outerHeight()/2;
+            x = 0; //(this.fixed_objinfo.r - this.posx)*(this.vh/(this.ih*this.posz)) + arrow_spacing_lr; // Add extra space for the arrow
+            //y = (this.fixed_objinfo.my - this.posy)/(this.ih*this.posz/this.vh) - this.fixed_objinfo.div.outerHeight()/2;
             // If div would leave the view area pin it to the left
-            if (x < (this.fixed_objinfo.arrow.hw + 5)) x = (this.fixed_objinfo.arrow.hw + 5); // Don't let the div escape to the left and let some space for the arrow
+            //if (x < (this.fixed_objinfo.arrow.hw + 5)) x = (this.fixed_objinfo.arrow.hw + 5); // Don't let the div escape to the left and let some space for the arrow
             $(this.fixed_objinfo.div).attr({"class": "ktv-objinfo"});
             sideward_pointing = true;
 
+            //$(this.fixed_objinfo.arrow.div).css({
+            //    top: ((this.fixed_objinfo.div.outerHeight() - this.fixed_objinfo.arrow.hw - 8 /* compensate objinfo_div padding*/) / 2),
+            //    left: -(this.fixed_objinfo.arrow.hw + 5),
+            //    transform: 'rotate(-90deg)'
+            //});
+
+            var arrow_left = (obj_x - (this.fixed_objinfo.arrow.hw / 2) - 1);
+            if (arrow_left < (10 - (this.fixed_objinfo.arrow.hw / 2))) arrow_left = 10 - (this.fixed_objinfo.arrow.hw / 2);
+
             $(this.fixed_objinfo.arrow.div).css({
-                top: ((this.fixed_objinfo.div.outerHeight() - this.fixed_objinfo.arrow.hw - 8 /* compensate objinfo_div padding*/) / 2),
-                left: -(this.fixed_objinfo.arrow.hw + 5),
-                transform: 'rotate(-90deg)'
+                top: (this.fixed_objinfo.div.outerHeight()),
+                left: arrow_left,
+                transform: 'rotate(180deg)'
             });
 
             //console.log("outerHeight: " + this.fixed_objinfo.div.outerHeight());
@@ -739,7 +753,13 @@ class KolkturmViewer {
             //console.log("Object not to far in any direction");
             //x = obj_x - this.fixed_objinfo.div.outerWidth()/2;
             //y = obj_y - this.fixed_objinfo.div.outerHeight() - 16; // Add extra space for the arrow
-            $(this.fixed_objinfo.div).attr({"class": "ktv-objinfo ktv-objinfo-arrow-bottom"});
+            $(this.fixed_objinfo.div).attr({"class": "ktv-objinfo"});
+
+            $(this.fixed_objinfo.arrow.div).css({
+                top: (this.fixed_objinfo.div.outerHeight()),
+                left: ((this.fixed_objinfo.div.outerWidth() - this.fixed_objinfo.arrow.hw) / 2) - 2,
+                transform: 'rotate(180deg)'
+            });
         }
 
         /* Handle object out of ranche on y axis */
@@ -767,10 +787,10 @@ class KolkturmViewer {
         }
 
         if (sideward_pointing) {
-            $(this.fixed_objinfo.arrow.div).show();
+            //$(this.fixed_objinfo.arrow.div).show();
         } else {
             bottom_spacing = bottom_spacing - arrow_spacing_bt;
-            $(this.fixed_objinfo.arrow.div).hide();
+            //$(this.fixed_objinfo.arrow.div).hide();
         }
 
         // Object has escaped downwards
