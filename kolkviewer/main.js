@@ -58,6 +58,7 @@ class KolkturmViewer {
         l: 0, // Left border (x position)
         b: 0, // Bottom border (y position)
         my: 0, // Middle y position
+        br: 10, // CSS border radius
         display: false,
         object_id: null,
         area_id: null,
@@ -89,7 +90,7 @@ class KolkturmViewer {
         this.fixed_objinfo.div = $("<div>").appendTo(this.wrapper);
 
         this.fixed_objinfo.arrow.div = $("<div>", { class: "ktv-objinfo-arrow" }).html("<svg width=\"20\" height=\"20\" xmlns=\"http://www.w3.org/2000/svg\"><path id=\"lineAB\" d=\"M 0 20 l 10 -20 l 10 20 q -10 -10 -20 0\" fill=\"black\" stroke=\"white\" /></svg>");
-        this.fixed_objinfo.arrow.hw = 20; // Hight and width of the arror
+        this.fixed_objinfo.arrow.hw = 20; // Hight and width of the arrow
 
         this.objinfo_div = $("<div>", { class: "ktv-objinfo ktv-objinfo-arrow-bottom" }).appendTo(this.wrapper);
 
@@ -690,117 +691,153 @@ class KolkturmViewer {
     positionFixedObjectInformation() {
         if (!this.fixed_objinfo.display) return;
 
-        const arrow_spacing_bt = this.fixed_objinfo.arrow.hw; // Required extra space for arrow pointing up or down
-        const arrow_spacing_lr = this.fixed_objinfo.arrow.hw + 8; // Required extra space for arrow pointing left or right
+        /*
+        * Handle object information div (objdiv) following the object
+        */
+
+        var arrow_spacing = 3; // TODO: Set elsewhere
+        // TODO: Remove unused CSS
+
+        // Object information div containers (objdiv) width and height
+        var objdiv_w = this.fixed_objinfo.div.outerWidth();
+        var objdiv_h = this.fixed_objinfo.div.outerHeight();
+
+        // Objdiv minimal and maximum allowed x and y position
+        var objdiv_min_x = this.fixed_objinfo.arrow.hw + arrow_spacing;
+        var objdiv_max_x = this.vw - objdiv_w - this.fixed_objinfo.arrow.hw - arrow_spacing;
+        var objdiv_min_y = this.fixed_objinfo.arrow.hw + arrow_spacing;
+        var objdiv_max_y = this.vh - objdiv_h - this.fixed_objinfo.arrow.hw - arrow_spacing;
 
         // Object middle top position in view space
         var obj_x = (this.fixed_objinfo.x - this.posx)*(this.vh/(this.ih*this.posz));
         var obj_y = (this.fixed_objinfo.y - this.posy)/(this.ih*this.posz/this.vh);
 
-        var x = obj_x - this.fixed_objinfo.div.outerWidth()/2;
-        var y = obj_y - this.fixed_objinfo.div.outerHeight() - arrow_spacing_bt; // Add extra space for the arrow
-        //console.log("ow: " + (this.fixed_objinfo.div.outerWidth()) + " vw: " + this.vw);
-        var sideward_pointing = false; // True if info div is pointing to the left or right
-        var bottom_spacing = this.vh - this.fixed_objinfo.div.outerHeight() - 22;
+        // Objdiv position
+        var objdiv_x = Math.min(Math.max(obj_x - objdiv_w / 2, objdiv_min_x), objdiv_max_x);
+        var objdiv_y = Math.min(obj_y - objdiv_h - this.fixed_objinfo.arrow.hw - arrow_spacing, objdiv_max_y);
 
-        /* Handle object out of ranche on x axis */
-        // Object is to far to the left
-        if (x < 0) {
-            //console.log("Object is to far to the left");
-            // Re-caculate div position 
-            x = 0; //(this.fixed_objinfo.r - this.posx)*(this.vh/(this.ih*this.posz)) + arrow_spacing_lr; // Add extra space for the arrow
-            //y = (this.fixed_objinfo.my - this.posy)/(this.ih*this.posz/this.vh) - this.fixed_objinfo.div.outerHeight()/2;
-            // If div would leave the view area pin it to the left
-            //if (x < (this.fixed_objinfo.arrow.hw + 5)) x = (this.fixed_objinfo.arrow.hw + 5); // Don't let the div escape to the left and let some space for the arrow
-            $(this.fixed_objinfo.div).attr({"class": "ktv-objinfo"});
-            sideward_pointing = true;
+        // If object left screen to the right, re-arrange objdiv position
+        if (obj_x < 0) {
+            objdiv_y = Math.max(Math.min(objdiv_y - obj_x, obj_y - objdiv_h / 2, objdiv_max_y), objdiv_min_y);
+        }
+        // If object left screen to the left, re-arrange objdiv position
+        else if (obj_x > this.vw) {
+            objdiv_y = Math.max(Math.min(objdiv_y + (obj_x - this.vw), obj_y - objdiv_h / 2, objdiv_max_y), objdiv_min_y);
+        }
+        // If objdiv left screen to the top re-arrange it
+        // TODO: Point to the bottom center of the object
+        else if (objdiv_y < 0) {
+            objdiv_y = Math.max(obj_y + this.fixed_objinfo.arrow.hw + arrow_spacing, objdiv_min_y);
+        }
+  
+        this.fixed_objinfo.div.css({top: objdiv_y, left: objdiv_x});
+        $(this.fixed_objinfo.div).attr({"class": "ktv-objinfo"}); // TODO: Set on a different place
 
-            //$(this.fixed_objinfo.arrow.div).css({
-            //    top: ((this.fixed_objinfo.div.outerHeight() - this.fixed_objinfo.arrow.hw - 8 /* compensate objinfo_div padding*/) / 2),
-            //    left: -(this.fixed_objinfo.arrow.hw + 5),
-            //    transform: 'rotate(-90deg)'
-            //});
+        /*
+        * Handle arrow around objdiv
+        */
 
-            var arrow_left = (obj_x - (this.fixed_objinfo.arrow.hw / 2) - 1);
-            if (arrow_left < (10 - (this.fixed_objinfo.arrow.hw / 2))) arrow_left = 10 - (this.fixed_objinfo.arrow.hw / 2);
+        // Calculate center position of the objdiv
+        var angle_center_x = objdiv_x + objdiv_w / 2;
+        var angle_center_y = objdiv_y + objdiv_h / 2;
 
-            $(this.fixed_objinfo.arrow.div).css({
-                top: (this.fixed_objinfo.div.outerHeight()),
-                left: arrow_left,
-                transform: 'rotate(180deg)'
-            });
+        var arrow_x = 0;
+        var arrow_y = 0;
+        var alpha = 0;
 
-            //console.log("outerHeight: " + this.fixed_objinfo.div.outerHeight());
-        // Object is to far to the right
-        } else if ((x + this.fixed_objinfo.div.outerWidth()) >= this.vw) {
-            //console.log("Object is to far to the right");
-            // Re-caculate div position
-            x = (this.fixed_objinfo.l - this.posx)*(this.vh/(this.ih*this.posz)) - this.fixed_objinfo.div.outerWidth() - arrow_spacing_lr; // Add extra space for the arrow
-            y = (this.fixed_objinfo.my - this.posy)/(this.ih*this.posz/this.vh) - this.fixed_objinfo.div.outerHeight()/2;
-            // If div would leave the view area pin it to the left
-            //if (x >= (this.vw + this.fixed_objinfo.div.outerWidth())) x = (this.vw + this.fixed_objinfo.div.outerWidth()) - 14; // Let some space for the arrow
-            if (x > (this.vw - this.fixed_objinfo.div.outerWidth() - arrow_spacing_lr)) x = (this.vw - this.fixed_objinfo.div.outerWidth() - arrow_spacing_lr); // Don't let the div escape to the right and let some space for the arrow
-            $(this.fixed_objinfo.div).attr({"class": "ktv-objinfo"});
-            sideward_pointing = true;
+        // Calculate minimum and maximum position for the arrow
+        var xmin = objdiv_x + this.fixed_objinfo.br;
+        var xmax = objdiv_x + objdiv_w - this.fixed_objinfo.br;
+        var ymin = objdiv_y + this.fixed_objinfo.br;
+        var ymax = objdiv_y + objdiv_h - this.fixed_objinfo.br;
 
-            $(this.fixed_objinfo.arrow.div).css({
-                top: ((this.fixed_objinfo.div.outerHeight() - this.fixed_objinfo.arrow.hw - 8 /* compensate objinfo_div padding*/) / 2),
-                left: (this.fixed_objinfo.div.outerWidth() + 5),
-                transform: 'rotate(90deg)'
-            });
-        // Object is to far to the bottom
+        var objdiv_bw = (objdiv_w - this.fixed_objinfo.div.innerWidth()) / 2; // TODO: Border width is also set at the top? Can we use that?
+
+        /* Object is above the straight part of the objdiv */
+        if ((obj_x >= xmin) && (obj_x <= xmax) && (obj_y < objdiv_y)) {
+            arrow_x = obj_x - objdiv_x - (this.fixed_objinfo.arrow.hw / 2) - objdiv_bw;
+            arrow_y = -this.fixed_objinfo.arrow.hw - arrow_spacing - objdiv_bw;
+        /* Object is past the upper right corner of the objdiv */
+        } else if ((obj_x > xmax) && (obj_y < ymin)) {
+            angle_center_x = xmax;
+            angle_center_y = ymin;
+
+            // Calculate angle for arrow
+            var a = obj_x - xmax; // Opposite leg of alpha
+            var b = ymin - obj_y; // Leg of alpha
+            var c = Math.sqrt(a*a + b*b) // Hypotenuse
+            alpha = Math.asin(a / c); // Angle of alpha in radian
+
+            arrow_x = objdiv_w - this.fixed_objinfo.br - (this.fixed_objinfo.arrow.hw / 2) - objdiv_bw + (Math.sin(alpha) * (this.fixed_objinfo.br + arrow_spacing + (this.fixed_objinfo.arrow.hw / 2)));
+            arrow_y = this.fixed_objinfo.br - (this.fixed_objinfo.arrow.hw / 2) - (Math.cos(alpha) * (this.fixed_objinfo.br + (this.fixed_objinfo.arrow.hw / 2) + arrow_spacing + objdiv_bw));
+            /* Object is to the right of the straight part of the objdiv */
+            } else if ((obj_x > (objdiv_x + objdiv_w)) && (obj_y >= ymin) && (obj_y <= ymax)) {
+            arrow_x = objdiv_w + arrow_spacing - objdiv_bw;
+            arrow_y = obj_y - objdiv_y - (this.fixed_objinfo.arrow.hw / 2) - objdiv_bw;
+            alpha = Math.PI / 2;
+        /* Object is past the lower right corner of the objdiv */
+        } else if ((obj_x > xmax) && (obj_y > ymax)) {
+            angle_center_x = xmax;
+            angle_center_y = ymax;
+
+            // Calculate angle for arrow
+            var a = obj_y - ymax; // Opposite leg of alpha
+            var b = obj_x - xmax; // Leg of alpha
+            var c = Math.sqrt(a*a + b*b) // Hypotenuse
+            alpha = (Math.PI / 2) + Math.asin(a / c); // Angle of alpha in radian
+
+            arrow_x = objdiv_w - this.fixed_objinfo.br - (this.fixed_objinfo.arrow.hw / 2) - objdiv_bw + (Math.sin(alpha) * (this.fixed_objinfo.br + arrow_spacing + (this.fixed_objinfo.arrow.hw / 2)));
+            arrow_y = objdiv_h - this.fixed_objinfo.br - (this.fixed_objinfo.arrow.hw / 2) - (Math.cos(alpha) * (this.fixed_objinfo.br + (this.fixed_objinfo.arrow.hw / 2) + arrow_spacing - objdiv_bw));
+            /* Object is below the straight part of the objdiv */
+            } else if ((obj_x >= xmin) && (obj_x <= xmax) && (obj_y > (objdiv_y + objdiv_h))) {
+            arrow_x = obj_x - objdiv_x - (this.fixed_objinfo.arrow.hw / 2) - objdiv_bw;
+            arrow_y = objdiv_h + arrow_spacing - objdiv_bw;
+            alpha = Math.PI;
+        /* Object is past the lower left corner of the objdiv */
+        } else if ((obj_x < xmin) && (obj_y > ymax)) {
+            angle_center_x = xmin;
+            angle_center_y = ymax;
+
+            // Calculate angle for arrow
+            var a = xmin - obj_x; // Opposite leg of alpha
+            var b = obj_y - ymax; // Leg of alpha
+            var c = Math.sqrt(a*a + b*b) // Hypotenuse
+            alpha = Math.PI + Math.asin(a / c); // Angle of alpha in radian
+
+            arrow_x = this.fixed_objinfo.br - (this.fixed_objinfo.arrow.hw / 2) - 1 + (Math.sin(alpha) * (this.fixed_objinfo.br + arrow_spacing + (this.fixed_objinfo.arrow.hw / 2)));
+            arrow_y = objdiv_h - this.fixed_objinfo.br - (this.fixed_objinfo.arrow.hw / 2) - (Math.cos(alpha) * (this.fixed_objinfo.br + (this.fixed_objinfo.arrow.hw / 2) + arrow_spacing - objdiv_bw));
+        /* Object is to the right of the straight part of the objdiv */
+        } else if ((obj_x < objdiv_x) && (obj_y >= ymin) && (obj_y <= ymax)) {
+            arrow_x = -this.fixed_objinfo.arrow.hw - arrow_spacing - objdiv_bw;
+            arrow_y = obj_y - objdiv_y - (this.fixed_objinfo.arrow.hw / 2) - objdiv_bw;
+            alpha = Math.PI / 2 * 3;
+        /* Object is past the upper left corner of the objdiv */
+        } else if ((obj_x < xmin) && (obj_y < ymin)) {
+            angle_center_x = xmin;
+            angle_center_y = ymin;
+
+            // Calculate angle for arrow
+            var a = ymin - obj_y; // Opposite leg of alpha
+            var b = xmin - obj_x; // Leg of alpha
+            var c = Math.sqrt(a*a + b*b) // Hypotenuse
+            alpha = (Math.PI / 2 * 3) + Math.asin(a / c); // Angle of alpha in radian
+
+            arrow_x = this.fixed_objinfo.br - (this.fixed_objinfo.arrow.hw / 2) - objdiv_bw + (Math.sin(alpha) * (this.fixed_objinfo.br + arrow_spacing + (this.fixed_objinfo.arrow.hw / 2)));
+            arrow_y = this.fixed_objinfo.br - (this.fixed_objinfo.arrow.hw / 2) - (Math.cos(alpha) * (this.fixed_objinfo.br + (this.fixed_objinfo.arrow.hw / 2) + arrow_spacing + objdiv_bw));
+        /* None of the above cases and the case that should never happen */
         } else {
-            //console.log("Object not to far in any direction");
-            //x = obj_x - this.fixed_objinfo.div.outerWidth()/2;
-            //y = obj_y - this.fixed_objinfo.div.outerHeight() - 16; // Add extra space for the arrow
-            $(this.fixed_objinfo.div).attr({"class": "ktv-objinfo"});
+            arrow_x = (objdiv_w - this.fixed_objinfo.arrow.hw - 2) / 2;
+            arrow_y = (objdiv_h - this.fixed_objinfo.arrow.hw - 2) / 2;
 
-            $(this.fixed_objinfo.arrow.div).css({
-                top: (this.fixed_objinfo.div.outerHeight()),
-                left: ((this.fixed_objinfo.div.outerWidth() - this.fixed_objinfo.arrow.hw) / 2) - 2,
-                transform: 'rotate(180deg)'
-            });
+            // Calculate angle for arrow
+            var a = obj_x - vw/2; // Opposite leg of alpha
+            var b = vh/2 - obj_y; // Leg of alpha
+            var c = Math.sqrt(a*a + b*b) // Hypotenuse
+            alpha = Math.asin(a / c); // Angle of alpha in radian
         }
 
-        /* Handle object out of ranche on y axis */
-        if (y < 0) {
-            sideward_pointing = true;
-            y = (this.fixed_objinfo.b - this.posy)/(this.ih*this.posz/this.vh) + arrow_spacing_lr;
-            if (y < arrow_spacing_lr) y = arrow_spacing_lr;
-            $(this.fixed_objinfo.div).attr({"class": "ktv-objinfo"});
-
-            $(this.fixed_objinfo.arrow.div).css({
-                top: -arrow_spacing_lr,
-                left: ((this.fixed_objinfo.div.outerWidth() - this.fixed_objinfo.arrow.hw) / 2) - 2,
-                transform: 'rotate(0deg)'
-            }); 
-        } else if (y > bottom_spacing) {
-            $(this.fixed_objinfo.div).attr({"class": "ktv-objinfo"});
-            y = this.vh - this.fixed_objinfo.div.outerHeight() - this.fixed_objinfo.arrow.hw - 10;
-            sideward_pointing = true;
-
-            $(this.fixed_objinfo.arrow.div).css({
-                top: (this.fixed_objinfo.div.outerHeight()),
-                left: ((this.fixed_objinfo.div.outerWidth() - this.fixed_objinfo.arrow.hw) / 2) - 2,
-                transform: 'rotate(180deg)'
-            });
-        }
-
-        if (sideward_pointing) {
-            //$(this.fixed_objinfo.arrow.div).show();
-        } else {
-            bottom_spacing = bottom_spacing - arrow_spacing_bt;
-            //$(this.fixed_objinfo.arrow.div).hide();
-        }
-
-        // Object has escaped downwards
-        /*if (y > bottom_spacing) {
-            y = bottom_spacing;
-        }*/
-
-        // TODO: Handle case where object escaped upwards
-
-        this.fixed_objinfo.div.css({top: y, left: x});
+        // Set arrows CSS properties
+        $(this.fixed_objinfo.arrow.div).css({top: arrow_y, left: arrow_x, transform: "rotate(" + alpha + "rad)"});
     }
 
     /**
